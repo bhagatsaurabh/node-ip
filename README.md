@@ -15,3 +15,6 @@ Types of Nodes (as of now):
 * GrayScale       - (convert 3 channel rgb to 1 channel grayscale)
 * Binarize        - (binarizes image)
 * Reduce Palette  - (reduces color info on image)
+
+
+See it in action [here](https://image-node.herokuapp.com/)
