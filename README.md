@@ -18,3 +18,6 @@ Types of Nodes (as of now):
 
 
 See it in action [here](https://image-node.herokuapp.com/)
+
+![Show1](/images/show1.png)
+![Show2](/images/show2.png)
