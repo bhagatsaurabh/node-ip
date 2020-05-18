@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NodIP</title>
+        <style type="text/css">
+            html, body {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            #container {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+            #editorContainer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: calc(60% - 2px);
+                height: 100%;
+                background-color: rgb(143, 142, 142);
+                z-index: 5;
+            }
+            #resizerContainer {
+                position: absolute;
+                top: 0;
+                left: calc(60% - 4px);
+                width: 8px;
+                height: 100%;
+                background-color: rgb(209, 209, 209);
+                box-sizing: border-box;
+                border: 1px solid rgb(58, 58, 58);
+                cursor: ew-resize;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 15;
+            }
+            #resizeIcon {
+                pointer-events: none;
+            }
+            #renderContainer {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: calc(40% - 4px);
+                height: 100%;
+                background-color: aliceblue;
+                z-index: 5;
+            }
+            .resizingWait {
+                user-select: none;
+                z-index: 10;
+                background-color: rgb(151, 151, 151);
+                color: rgb(241, 241, 241);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: .9;
+                visibility: hidden;
+                pointer-events: none;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 1.2em;
+            }
+            .renderingWait {
+                user-select: none;
+                z-index: 9;
+                background-color: rgb(151, 151, 151);
+                color: rgb(241, 241, 241);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: .9;
+                visibility: hidden;
+                pointer-events: none;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 1.2em;
+            }
+            #toolboxContainer {
+                position: absolute;
+                left: -4%;
+                top : 0;
+                width: 4%;
+                height: 100%;
+                background-color: rgb(194, 194, 194);
+                z-index: 14;
+                transition: left .3s linear;
+                box-sizing: border-box;
+                border-right: 1px solid #000;
+            }
+            .toolboxSectionContainer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                background-color: rgb(153, 153, 153);
+                z-index: 4;
+                box-sizing: border-box;
+                padding: 1vh;
+            }
+            .toolboxSectionHeading {
+                left: 100%;
+                position: relative;
+                font-size: .75em;
+                writing-mode: vertical-rl;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                margin-top: 1vh;
+                margin-bottom: 1vh;
+                padding-top: 1vw;
+                padding-bottom: 1vw;
+                padding-left: .2vw;
+                padding-right: .2vw;
+                border-top-right-radius: 1vh;
+                border-bottom-right-radius: 1vh;
+                box-shadow: 0px 0px 3px 1px;
+                background-color: rgb(153, 153, 153);
+                font-weight: bold;
+                transition: opacity .3s linear;
+            }
+            .toolboxSectionHeading:hover {
+                background-color: rgb(201, 201, 201);
+                box-shadow: 0px 0px 4px 2px;
+            }
+            .toolboxSectionItemContainer {
+                box-sizing: border-box;
+                position: relative;
+                width: 100%;
+                padding-bottom: 100%;
+                margin-bottom: 1vh;
+                cursor: pointer;
+            }
+            .toolboxSectionItemContainer:hover {
+                box-shadow: 0px 0px 2px .5px;
+            }
+            .toolboxSectionItem {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: 60%;
+            }
+            #squareIcon {
+                background-image: url('assets/icons/squareIcon.png');
+            }
+            #circleIcon {
+                background-image: url('assets/icons/circleIcon.png');
+            }
+            #lineIcon {
+                background-image: url('assets/icons/lineIcon.png');
+            }
+            #curveIcon {
+                background-image: url('assets/icons/curveIcon.png');
+            }
+            #imageIcon {
+                background-image: url('assets/icons/imageIcon.png');
+            }
+            #grayscaleIcon {
+                background-image: url('assets/icons/grayscaleIcon.png');
+            }
+            #binarizeIcon {
+                background-image: url('assets/icons/binarizeIcon.png');
+            }
+            #layerIcon {
+                background-image: url('assets/icons/layerIcon.png');
+            }
+            #colorconvertIcon {
+                background-image: url('assets/icons/colorconvertIcon.png');
+            }
+            #combinechannelIcon {
+                background-image: url('assets/icons/combinechannelIcon.png');
+            }
+            #brightnessIcon {
+                background-image: url('assets/icons/brightnessIcon.png');
+            }
+            #contrastIcon {
+                background-image: url('assets/icons/contrastIcon.png');
+            }
+            #reducepaletteIcon {
+                background-image: url('assets/icons/reducepaletteIcon.png');
+            }
+            #gammaIcon {
+                background-image: url('assets/icons/gammaIcon.png');
+            }
+            #downloadIcon {
+                background-image: url('assets/icons/downloadIcon.png');
+            }
+            .toolboxSectionItemContainer .tooltipText {
+                font-size: .7em;
+                padding-left: 2.5vh;
+                padding-right: 2.5vh;
+                padding-top: .5vh;
+                padding-bottom: .5vh;
+                visibility: hidden;
+                background-color: #555;
+                color: #fff;
+                text-align: center;
+                border-radius: 999px;
+
+                position: absolute;
+                top: 30%;
+                left: 120%;
+                z-index: 1;
+
+                opacity: 0;
+                transition: opacity .2s;
+                transition-delay: .5s;
+            }
+            .toolboxSectionItemContainer:hover > .tooltipText {
+                visibility: visible;
+                opacity: .85;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <div id="toolboxContainer">
+                <div id="nodesToolbox" class="toolboxSectionContainer">
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">Image</span>
+                        <div draggable="true" id="imageIcon" class="toolboxSectionItem"></div>
+                    </div>
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">Layer</span>
+                        <div draggable="true" id="layerIcon" class="toolboxSectionItem"></div>
+                    </div>
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">Color&nbsp;Convert</span>
+                        <div draggable="true" id="colorconvertIcon" class="toolboxSectionItem"></div>
+                    </div>
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">Combine&nbsp;Channels</span>
+                        <div draggable="true" id="combinechannelIcon" class="toolboxSectionItem"></div>
+                    </div>
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">Brightness</span>
+                        <div draggable="true" id="brightnessIcon" class="toolboxSectionItem"></div>
+                    </div>
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">Contrast</span>
+                        <div draggable="true" id="contrastIcon" class="toolboxSectionItem"></div>
+                    </div>
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">Gamma</span>
+                        <div draggable="true" id="gammaIcon" class="toolboxSectionItem"></div>
+                    </div>
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">GrayScale</span>
+                        <div draggable="true" id="grayscaleIcon" class="toolboxSectionItem"></div>
+                    </div>
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">Binarize</span>
+                        <div draggable="true" id="binarizeIcon" class="toolboxSectionItem"></div>
+                    </div>
+                    <div class="toolboxSectionItemContainer">
+                        <span class="tooltipText">Reduce&nbsp;Palette</span>
+                        <div draggable="true" id="reducepaletteIcon" class="toolboxSectionItem"></div>
+                    </div>
+                </div>
+                <div id="editToolbox" class="toolboxSectionContainer">
+                    <div class="toolboxSectionItemContainer" onclick="downloadRender()">
+                        <span class="tooltipText">Download</span>
+                        <div id="downloadIcon" class="toolboxSectionItem"></div>
+                    </div>
+                </div>
+                <div id="nodesToolboxHeading" onclick="toolboxSectionClicked(this)" class="toolboxSectionHeading">Nodes</div>
+                <div id="editToolboxHeading" onclick="toolboxSectionClicked(this)" class="toolboxSectionHeading">File</div>
+            </div>
+            <div id="editorContainer">
+                <canvas id="editorCanvas"></canvas>
+                <div class="resizingWait">Resizing...</div>
+            </div>
+            <div id="resizerContainer">
+                <svg id="resizeIcon" width="8" height="30">
+                    <circle cx="3" cy="3" r="2" fill="black" />
+                    <circle cx="3" cy="15" r="2" fill="black" />
+                    <circle cx="3" cy="27" r="2" fill="black" />
+                </svg>
+            </div>
+            <div id="renderContainer">
+                <canvas id="renderCanvas"></canvas>
+                <div class="resizingWait">Resizing...</div>
+                <div class="renderingWait">Rendering</div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="scripts/index.js"></script>
+        <script type="text/javascript" src="scripts/requestAnimationFrame.js"></script>
+        <script type="text/javascript" src="scripts/utility.js"></script>
+        <script type="text/javascript" src="scripts/components.js"></script>
+        <script type="text/javascript" src="scripts/nodes.js"></script>
+        <script type="text/javascript" src="scripts/editor.js"></script>
+        <script type="text/javascript" src="scripts/renderer.js"></script>
+    </body>
+</html>
