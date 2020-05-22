@@ -1,6 +1,8 @@
 # node-ip
 A node based editor for image processing with layers
 
+See it in action [here](https://image-node.herokuapp.com/)
+
 A simple to use node-editor for image processing made using WebCanvasAPI and Vanilla JS, no libraries... !
 Some nodes can process images as well as individual color channels.
 
@@ -16,8 +18,6 @@ Types of Nodes (as of now):
 * Binarize        - (binarizes image)
 * Reduce Palette  - (reduces color info on image)
 
-
-See it in action [here](https://image-node.herokuapp.com/)
 
 Upload-Process-Render-Download !
 
