@@ -1,0 +1,228 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+#editorContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(60% - 2px);
+  height: 100%;
+  background-color: rgb(143, 142, 142);
+  z-index: 5;
+}
+#resizerContainer {
+  position: absolute;
+  top: 0;
+  left: calc(60% - 4px);
+  width: 8px;
+  height: 100%;
+  background-color: rgb(209, 209, 209);
+  box-sizing: border-box;
+  border: 1px solid rgb(58, 58, 58);
+  cursor: ew-resize;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 15;
+}
+#resizeIcon {
+  pointer-events: none;
+}
+#renderContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(40% - 4px);
+  height: 100%;
+  background-color: aliceblue;
+  z-index: 5;
+}
+.resizingWait {
+  user-select: none;
+  z-index: 10;
+  background-color: rgb(151, 151, 151);
+  color: rgb(241, 241, 241);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  visibility: hidden;
+  pointer-events: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.2em;
+}
+.renderingWait {
+  user-select: none;
+  z-index: 9;
+  background-color: rgb(151, 151, 151);
+  color: rgb(241, 241, 241);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  visibility: hidden;
+  pointer-events: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.2em;
+}
+#toolboxContainer {
+  position: absolute;
+  left: -4%;
+  top: 0;
+  width: 4%;
+  height: 100%;
+  background-color: rgb(194, 194, 194);
+  z-index: 14;
+  transition: left 0.3s linear;
+  box-sizing: border-box;
+  border-right: 1px solid #000;
+}
+.toolboxSectionContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: rgb(153, 153, 153);
+  z-index: 4;
+  box-sizing: border-box;
+  padding: 1vh;
+}
+.toolboxSectionHeading {
+  left: 100%;
+  position: relative;
+  font-size: 0.75em;
+  writing-mode: vertical-rl;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+  padding-left: 0.2vw;
+  padding-right: 0.2vw;
+  border-top-right-radius: 1vh;
+  border-bottom-right-radius: 1vh;
+  box-shadow: 0px 0px 3px 1px;
+  background-color: rgb(153, 153, 153);
+  font-weight: bold;
+  transition: opacity 0.3s linear;
+}
+.toolboxSectionHeading:hover {
+  background-color: rgb(201, 201, 201);
+  box-shadow: 0px 0px 4px 2px;
+}
+.toolboxSectionItemContainer {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  margin-bottom: 1vh;
+  cursor: pointer;
+}
+.toolboxSectionItemContainer:hover {
+  box-shadow: 0px 0px 2px 0.5px;
+}
+.toolboxSectionItem {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 60%;
+}
+#squareIcon {
+  background-image: url('../assets/icons/squareIcon.png');
+}
+#circleIcon {
+  background-image: url('../assets/icons/circleIcon.png');
+}
+#lineIcon {
+  background-image: url('../assets/icons/lineIcon.png');
+}
+#curveIcon {
+  background-image: url('../assets/icons/curveIcon.png');
+}
+#imageIcon {
+  background-image: url('../assets/icons/imageIcon.png');
+}
+#grayscaleIcon {
+  background-image: url('../assets/icons/grayscaleIcon.png');
+}
+#binarizeIcon {
+  background-image: url('../assets/icons/binarizeIcon.png');
+}
+#layerIcon {
+  background-image: url('../assets/icons/layerIcon.png');
+}
+#colorconvertIcon {
+  background-image: url('../assets/icons/colorconvertIcon.png');
+}
+#combinechannelIcon {
+  background-image: url('../assets/icons/combinechannelIcon.png');
+}
+#brightnessIcon {
+  background-image: url('../assets/icons/brightnessIcon.png');
+}
+#contrastIcon {
+  background-image: url('../assets/icons/contrastIcon.png');
+}
+#reducepaletteIcon {
+  background-image: url('../assets/icons/reducepaletteIcon.png');
+}
+#gammaIcon {
+  background-image: url('../assets/icons/gammaIcon.png');
+}
+#downloadIcon {
+  background-image: url('../assets/icons/downloadIcon.png');
+}
+.toolboxSectionItemContainer .tooltipText {
+  font-size: 0.7em;
+  padding-left: 2.5vh;
+  padding-right: 2.5vh;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 999px;
+
+  position: absolute;
+  top: 30%;
+  left: 120%;
+  z-index: 1;
+
+  opacity: 0;
+  transition: opacity 0.2s;
+  transition-delay: 0.5s;
+}
+.toolboxSectionItemContainer:hover > .tooltipText {
+  visibility: visible;
+  opacity: 0.85;
+}
