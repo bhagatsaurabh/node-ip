@@ -1,4 +1,7 @@
 # node-ip
+
+> Project Re-design in-progress...
+
 A node based editor for image processing with layers
 
 See it in action [here](https://image-node.herokuapp.com/)
