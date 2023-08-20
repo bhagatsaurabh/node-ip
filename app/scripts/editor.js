@@ -63,7 +63,7 @@ document.addEventListener('keyup', (event) => {
 }, true);
 
 document.addEventListener("dragstart", function (event) {
-    if (event.target.id && event.target.classList.length > 0 && event.target.classList.contains('toolboxSectionItem')) {
+    if (event.target.id && event.target.classList.length > 0 && event.target.classList.contains('icon')) {
         event.dataTransfer.setData("newNode", event.target.id.replace('Icon', ''));
     }
 });
