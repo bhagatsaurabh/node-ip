@@ -14,116 +14,65 @@
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="container">
-      <div id="toolboxContainer">
-        <div id="nodesToolbox" class="toolboxSectionContainer">
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">Image</span>
-            <div
-              draggable="true"
-              id="imageIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">Layer</span>
-            <div
-              draggable="true"
-              id="layerIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">Color&nbsp;Convert</span>
-            <div
-              draggable="true"
-              id="colorconvertIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">Combine&nbsp;Channels</span>
-            <div
-              draggable="true"
-              id="combinechannelIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">Brightness</span>
-            <div
-              draggable="true"
-              id="brightnessIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">Contrast</span>
-            <div
-              draggable="true"
-              id="contrastIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">Gamma</span>
-            <div
-              draggable="true"
-              id="gammaIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">GrayScale</span>
-            <div
-              draggable="true"
-              id="grayscaleIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">Binarize</span>
-            <div
-              draggable="true"
-              id="binarizeIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-          <div class="toolboxSectionItemContainer">
-            <span class="tooltipText">Reduce&nbsp;Palette</span>
-            <div
-              draggable="true"
-              id="reducepaletteIcon"
-              class="toolboxSectionItem"
-            ></div>
-          </div>
-        </div>
-        <div id="editToolbox" class="toolboxSectionContainer">
-          <div class="toolboxSectionItemContainer" onclick="downloadRender()">
-            <span class="tooltipText">Download</span>
-            <div id="downloadIcon" class="toolboxSectionItem"></div>
-          </div>
-        </div>
-        <div
-          id="nodesToolboxHeading"
-          onclick="toolboxSectionClicked(this)"
-          class="toolboxSectionHeading"
-        >
-          Nodes
-        </div>
-        <div
-          id="editToolboxHeading"
-          onclick="toolboxSectionClicked(this)"
-          class="toolboxSectionHeading"
-        >
-          File
-        </div>
-      </div>
+    <main id="app">
+      <aside class="toolbox">
+        <div data-category="nodes" class="heading">Nodes</div>
+        <div data-category="edit" class="heading">File</div>
+        <section id="toolbox-nodes" class="toolbox-category">
+          <button class="item-container" draggable="true">
+            <span class="tooltip">Image</span>
+            <img class="icon" src="./assets/icons/image.png" alt="image-icon" draggable="false" />
+            <span>Image</span>
+          </button>
+          <button class="item-container" draggable="true">
+            <span class="tooltip">Layer</span>
+            <img class="icon" src="./assets/icons/layer.png" alt="image-icon" draggable="false" />
+          </button>
+          <button class="item-container" draggable="true">
+            <span class="tooltip">Color&nbsp;Convert</span>
+            <img class="icon" src="./assets/icons/colorconvert.png" alt="image-icon" draggable="false" />
+          </button>
+          <button class="item-container" draggable="true">
+            <span class="tooltip">Combine&nbsp;Channels</span>
+            <img class="icon" src="./assets/icons/combinechannel.png" alt="image-icon" draggable="false" />
+          </button>
+          <button class="item-container" draggable="true">
+            <span class="tooltip">Brightness</span>
+            <img class="icon" src="./assets/icons/brightness.png" alt="image-icon" draggable="false" />
+          </button>
+          <button class="item-container" draggable="true">
+            <span class="tooltip">Contrast</span>
+            <img class="icon" src="./assets/icons/contrast.png" alt="image-icon" draggable="false" />
+          </button>
+          <button class="item-container" draggable="true">
+            <span class="tooltip">Gamma</span>
+            <img class="icon" src="./assets/icons/gamma.png" alt="image-icon" draggable="false" />
+          </button>
+          <button class="item-container" draggable="true">
+            <span class="tooltip">GrayScale</span>
+            <img class="icon" src="./assets/icons/grayscale.png" alt="image-icon" draggable="false" />
+          </button>
+          <button class="item-container" draggable="true">
+            <span class="tooltip">Binarize</span>
+            <img class="icon" src="./assets/icons/binarize.png" alt="image-icon" draggable="false" />
+          </button>
+          <button class="item-container" draggable="true">
+            <span class="tooltip">Reduce Palette</span>
+            <img class="icon" src="./assets/icons/reducepalette.png" alt="image-icon" draggable="false" />
+          </button>
+        </section>
+        <section id="toolbox-edit" class="toolbox-category">
+          <button class="item-container" onclick="downloadRender()" draggable="true">
+            <span class="tooltip">Download</span>
+            <img class="icon" src="./assets/icons/download.png" alt="image-icon" draggable="false" />
+          </button>
+        </section>
+      </aside>
       <div id="editorContainer">
         <canvas id="editorCanvas"></canvas>
         <div class="resizingWait">Resizing...</div>
       </div>
-      <div id="resizerContainer">
+      <div class="resize">
         <svg id="resizeIcon" width="8" height="30">
           <circle cx="3" cy="3" r="2" fill="black" />
           <circle cx="3" cy="15" r="2" fill="black" />
@@ -135,10 +84,9 @@
         <div class="resizingWait">Resizing...</div>
         <div class="renderingWait">Rendering</div>
       </div>
-    </div>
+    </main>
 
-    <script type="text/javascript" src="scripts/index.js"></script>
-    <script type="module" src="scripts/utility.mjs"></script>
+    <script type="module" src="scripts/index.mjs"></script>
     <script type="text/javascript" src="scripts/components.js"></script>
     <script type="text/javascript" src="scripts/nodes.js"></script>
     <script type="text/javascript" src="scripts/editor.js"></script>

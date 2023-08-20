@@ -1,0 +1,116 @@
+:root {
+  --toolbox-width: 5rem;
+}
+
+.toolbox {
+  position: fixed;
+  left: calc(0rem - var(--toolbox-width));
+  top: 0;
+  width: 5rem;
+  height: 100%;
+  background-color: rgb(194, 194, 194);
+  z-index: 14;
+  transition: left 0.15s linear, box-shadow 0.15s linear;
+  border-right: 1px solid #000;
+}
+.toolbox.open {
+  left: 0;
+}
+
+.toolbox-category {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: rgb(153, 153, 153);
+  padding: 1vh;
+  opacity: 0;
+  transition: opacity 0.15s linear;
+  box-shadow: 0 0 0px 0px #000;
+}
+.toolbox-category.show {
+  opacity: 1;
+  box-shadow: 0 0 10px 0px #000;
+  visibility: visible !important;
+}
+
+.toolbox .heading {
+  left: 100%;
+  position: relative;
+  font-size: 0.75em;
+  writing-mode: vertical-rl;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+  padding-left: 0.2vw;
+  padding-right: 0.2vw;
+  border-top-right-radius: 1vh;
+  border-bottom-right-radius: 1vh;
+  box-shadow: 4px 0px 8px -3px;
+  background-color: rgb(153, 153, 153);
+  font-weight: bold;
+  transition: background-color 0.15s linear;
+}
+.toolbox .heading.active {
+  z-index: 5;
+}
+.toolbox .heading.active:hover {
+  background-color: rgb(153, 153, 153);
+}
+.toolbox .heading:hover {
+  background-color: rgb(201, 201, 201);
+}
+
+.toolbox .item-container {
+  padding: 0;
+  background-color: transparent;
+  position: relative;
+  width: 100%;
+  margin-bottom: 1vh;
+  cursor: pointer;
+  border: 1px solid #000;
+  box-shadow: 0px 0px 0px 0px;
+  transition: box-shadow 0.1s linear;
+}
+.toolbox .item-container:hover {
+  box-shadow: 0px 0px 2px 0.5px;
+}
+.icon {
+  margin: 0;
+}
+.item-container .tooltip {
+  font-size: 0.7em;
+  padding-left: 2.5vh;
+  padding-right: 2.5vh;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 999px;
+
+  position: absolute;
+  top: 30%;
+  left: 120%;
+  z-index: 1;
+
+  opacity: 0;
+  transition: opacity 0.2s;
+  transition-delay: 0.5s;
+}
+.item-container:hover > .tooltip {
+  visibility: visible;
+  opacity: 0.85;
+}
