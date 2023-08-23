@@ -15,56 +15,71 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <main id="app">
-      <aside class="toolbox">
-        <div data-category="nodes" class="heading">Nodes</div>
-        <div data-category="edit" class="heading">File</div>
+      <aside class="toolbox custom-scroll">
+        <div class="heading-list">
+          <div data-category="close" class="heading close-toolbox">
+            <img src="./assets/icons/back.png" alt="back-icon" draggable="false" />
+          </div>
+          <div data-category="nodes" class="heading">Nodes</div>
+          <div data-category="edit" class="heading">File</div>
+        </div>
         <section id="toolbox-nodes" class="toolbox-category">
           <button class="item-container" draggable="true">
             <span class="tooltip">Image</span>
             <img class="icon" src="./assets/icons/image.png" alt="image-icon" draggable="false" />
-            <span>Image</span>
+            <span class="item-name">Image</span>
           </button>
           <button class="item-container" draggable="true">
             <span class="tooltip">Layer</span>
             <img class="icon" src="./assets/icons/layer.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Layer</span>
           </button>
           <button class="item-container" draggable="true">
             <span class="tooltip">Color&nbsp;Convert</span>
             <img class="icon" src="./assets/icons/colorconvert.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Color&nbsp;Convert</span>
           </button>
           <button class="item-container" draggable="true">
             <span class="tooltip">Combine&nbsp;Channels</span>
             <img class="icon" src="./assets/icons/combinechannel.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Combine&nbsp;Channels</span>
           </button>
           <button class="item-container" draggable="true">
             <span class="tooltip">Brightness</span>
             <img class="icon" src="./assets/icons/brightness.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Brightness</span>
           </button>
           <button class="item-container" draggable="true">
             <span class="tooltip">Contrast</span>
             <img class="icon" src="./assets/icons/contrast.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Contrast</span>
           </button>
           <button class="item-container" draggable="true">
             <span class="tooltip">Gamma</span>
             <img class="icon" src="./assets/icons/gamma.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Gamma</span>
           </button>
           <button class="item-container" draggable="true">
-            <span class="tooltip">GrayScale</span>
+            <span class="tooltip">Grayscale</span>
             <img class="icon" src="./assets/icons/grayscale.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Grayscale</span>
           </button>
           <button class="item-container" draggable="true">
             <span class="tooltip">Binarize</span>
             <img class="icon" src="./assets/icons/binarize.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Binarize</span>
           </button>
           <button class="item-container" draggable="true">
-            <span class="tooltip">Reduce Palette</span>
+            <span class="tooltip">Reduce&nbsp;Palette</span>
             <img class="icon" src="./assets/icons/reducepalette.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Reduce&nbsp;Palette</span>
           </button>
         </section>
         <section id="toolbox-edit" class="toolbox-category">
           <button class="item-container" onclick="downloadRender()" draggable="true">
             <span class="tooltip">Download</span>
             <img class="icon" src="./assets/icons/download.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Download</span>
           </button>
         </section>
       </aside>

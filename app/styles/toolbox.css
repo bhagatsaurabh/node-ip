@@ -11,10 +11,15 @@
   background-color: rgb(194, 194, 194);
   z-index: 14;
   transition: left 0.15s linear, box-shadow 0.15s linear;
-  border-right: 1px solid #000;
+  box-shadow: 0 0 0px 0px #000;
 }
 .toolbox.open {
   left: 0;
+  box-shadow: 0 0 10px 0px #000;
+}
+
+.toolbox.open .item-name {
+  display: none;
 }
 
 .toolbox-category {
@@ -32,12 +37,26 @@
   padding: 1vh;
   opacity: 0;
   transition: opacity 0.15s linear;
-  box-shadow: 0 0 0px 0px #000;
 }
 .toolbox-category.show {
   opacity: 1;
-  box-shadow: 0 0 10px 0px #000;
   visibility: visible !important;
+}
+
+.close-toolbox {
+  width: 1.1rem;
+  box-shadow: 4px 0px 8px -3px !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s linear;
+}
+.close-toolbox img {
+  width: 100%;
+  pointer-events: none;
+}
+.toolbox.open .close-toolbox {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .toolbox .heading {
@@ -62,8 +81,12 @@
   font-weight: bold;
   transition: background-color 0.15s linear;
 }
-.toolbox .heading.active {
+.toolbox.open .heading {
+  box-shadow: 4px 0px 8px -3px, 4px 0px 5px -3px inset;
+}
+.toolbox.open .heading.active {
   z-index: 5;
+  box-shadow: 4px 0px 8px -3px;
 }
 .toolbox .heading.active:hover {
   background-color: rgb(153, 153, 153);
@@ -113,4 +136,10 @@
 .item-container:hover > .tooltip {
   visibility: visible;
   opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .toolbox.open .item-name {
+    display: block;
+  }
 }
