@@ -36,11 +36,7 @@ window.addEventListener("mousedown", (event) => {
 });
 
 window.addEventListener("mousemove", (event) => {
-  if (
-    isResizing &&
-    event.x > document.body.clientWidth * 0.3 &&
-    event.x < document.body.clientWidth * 0.8
-  ) {
+  if (isResizing && event.x > document.body.clientWidth * 0.3 && event.x < document.body.clientWidth * 0.8) {
     resizeEl.style.left = event.x - resizerWidth / 2 + "px";
     editorContainer.style.width = event.x - resizerWidth / 2 + "px";
     renderContiner.style.width = document.body.clientWidth - event.x - resizerWidth / 2 + "px";
@@ -72,12 +68,22 @@ function resizingWait(status) {
 
 const toolboxSectionClickHandler = (e) => {
   const name = e.target.dataset.category;
+
+  if (name === "close") {
+    toolboxEl.classList.toggle("open");
+    refAll(".toolbox .heading").forEach((el) => el.classList.remove("active"));
+    return;
+  }
+
   refAll(".toolbox .heading").forEach((el) => el.classList.remove("active"));
   e.target.classList.add("active");
   const section = refOne(`#toolbox-${name}`);
   const isToolboxOpened = toolboxEl.classList.contains("open");
   if (!isToolboxOpened || section.classList.contains("show")) {
     toolboxEl.classList.toggle("open");
+    if (section.classList.contains("show")) {
+      refAll(".toolbox .heading").forEach((el) => el.classList.remove("active"));
+    }
   }
   refAll(".toolbox .toolbox-category").forEach((el) => el.classList.remove("show"));
   section.classList.toggle("show");
