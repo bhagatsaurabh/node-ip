@@ -4,18 +4,18 @@ init();
 refAll(".toolbox .toolbox-category").forEach((el) => (el.style.visibility = "hidden"));
 
 const resizeEl = refOne(".resize");
-var editorContainer = document.getElementById("editorContainer");
-var renderContiner = document.getElementById("renderContainer");
+const editorEl = refOne(".editor");
+const renderedEl = refOne(".rendered");
 
 var editorCanvas = document.getElementById("editorCanvas");
 var renderCanvas = document.getElementById("renderCanvas");
 
 const toolboxEl = refOne(".toolbox");
 
-var editorCanvasWidth = getComputedStyle(editorContainer).width;
-var editorCanvasHeight = getComputedStyle(editorContainer).height;
-var renderCanvasWidth = getComputedStyle(renderContiner).width;
-var renderCanvasHeight = getComputedStyle(renderContiner).height;
+var editorCanvasWidth = getComputedStyle(editorEl).width;
+var editorCanvasHeight = getComputedStyle(editorEl).height;
+var renderCanvasWidth = getComputedStyle(renderedEl).width;
+var renderCanvasHeight = getComputedStyle(renderedEl).height;
 
 editorCanvas.setAttribute("width", editorCanvasWidth.substring(0, editorCanvasWidth.length - 2));
 editorCanvas.setAttribute("height", editorCanvasHeight.substring(0, editorCanvasHeight.length - 2));
@@ -38,8 +38,8 @@ window.addEventListener("mousedown", (event) => {
 window.addEventListener("mousemove", (event) => {
   if (isResizing && event.x > document.body.clientWidth * 0.3 && event.x < document.body.clientWidth * 0.8) {
     resizeEl.style.left = event.x - resizerWidth / 2 + "px";
-    editorContainer.style.width = event.x - resizerWidth / 2 + "px";
-    renderContiner.style.width = document.body.clientWidth - event.x - resizerWidth / 2 + "px";
+    editorEl.style.width = event.x - resizerWidth / 2 + "px";
+    renderedEl.style.width = document.body.clientWidth - event.x - resizerWidth / 2 + "px";
     editorCanvas.setAttribute("width", event.x - resizerWidth / 2);
     renderCanvas.setAttribute("width", document.body.clientWidth - event.x - resizerWidth / 2);
   }
@@ -54,11 +54,11 @@ window.addEventListener("mouseup", (event) => {
 
 function resizingWait(status) {
   if (status) {
-    for (var el of document.getElementsByClassName("resizingWait")) {
+    for (var el of refAll(".resizing-overlay")) {
       el.style.visibility = "visible";
     }
   } else {
-    for (var el of document.getElementsByClassName("resizingWait")) {
+    for (var el of refAll(".resizing-overlay")) {
       el.style.visibility = "hidden";
       redraw();
       renderOutput();
@@ -72,6 +72,7 @@ const toolboxSectionClickHandler = (e) => {
   if (name === "close") {
     toolboxEl.classList.toggle("open");
     refAll(".toolbox .heading").forEach((el) => el.classList.remove("active"));
+    refAll(".toolbox .toolbox-category").forEach((el) => el.classList.remove("show"));
     return;
   }
 
@@ -83,6 +84,8 @@ const toolboxSectionClickHandler = (e) => {
     toolboxEl.classList.toggle("open");
     if (section.classList.contains("show")) {
       refAll(".toolbox .heading").forEach((el) => el.classList.remove("active"));
+      refAll(".toolbox .toolbox-category").forEach((el) => el.classList.remove("show"));
+      return;
     }
   }
   refAll(".toolbox .toolbox-category").forEach((el) => el.classList.remove("show"));
