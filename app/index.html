@@ -83,22 +83,25 @@
           </button>
         </section>
       </aside>
-      <section class="editor">
-        <canvas id="editorCanvas"></canvas>
-        <div class="resizing-overlay">Resizing...</div>
-      </section>
-      <div class="resize">
-        <svg class="resize-icon" width="8" height="30">
-          <circle cx="3" cy="3" r="2" fill="black" />
-          <circle cx="3" cy="15" r="2" fill="black" />
-          <circle cx="3" cy="27" r="2" fill="black" />
-        </svg>
+      <div class="editor-container">
+        <section class="editor">
+          <canvas id="editorCanvas"></canvas>
+          <div class="resizing-overlay">Resizing...</div>
+        </section>
+        <div class="resize">
+          <svg class="resize-icon" width="8" height="30">
+            <circle cx="3" cy="3" r="2" fill="black" />
+            <circle cx="3" cy="15" r="2" fill="black" />
+            <circle cx="3" cy="27" r="2" fill="black" />
+          </svg>
+          <img class="resize-thumb" src="./assets/icons/resize.png" alt="resize-icon" draggable="false" />
+        </div>
+        <section class="rendered">
+          <canvas id="renderCanvas"></canvas>
+          <div class="resizing-overlay">Resizing...</div>
+          <div class="rendering-overlay">Rendering</div>
+        </section>
       </div>
-      <section class="rendered">
-        <canvas id="renderCanvas"></canvas>
-        <div class="resizing-overlay">Resizing...</div>
-        <div class="rendering-overlay">Rendering</div>
-      </section>
     </main>
 
     <script type="module" src="scripts/index.mjs"></script>

@@ -7,64 +7,66 @@ const resizeEl = refOne(".resize");
 const editorEl = refOne(".editor");
 const renderedEl = refOne(".rendered");
 
-var editorCanvas = document.getElementById("editorCanvas");
-var renderCanvas = document.getElementById("renderCanvas");
+const editorCanvas = refOne("#editorCanvas");
+const renderCanvas = refOne("#renderCanvas");
 
 const toolboxEl = refOne(".toolbox");
 
-var editorCanvasWidth = getComputedStyle(editorEl).width;
-var editorCanvasHeight = getComputedStyle(editorEl).height;
-var renderCanvasWidth = getComputedStyle(renderedEl).width;
-var renderCanvasHeight = getComputedStyle(renderedEl).height;
+const { width: editorCanvasWidth, height: editorCanvasHeight } = getComputedStyle(editorEl);
+const { width: renderCanvasWidth, height: renderCanvasHeight } = getComputedStyle(renderedEl);
 
 editorCanvas.setAttribute("width", editorCanvasWidth.substring(0, editorCanvasWidth.length - 2));
 editorCanvas.setAttribute("height", editorCanvasHeight.substring(0, editorCanvasHeight.length - 2));
-
 renderCanvas.setAttribute("width", renderCanvasWidth.substring(0, renderCanvasWidth.length - 2));
 renderCanvas.setAttribute("height", renderCanvasHeight.substring(0, renderCanvasHeight.length - 2));
 
-var resizerWidth = window.getComputedStyle(resizeEl).width;
+let resizerWidth = getComputedStyle(resizeEl).width;
 resizerWidth = resizerWidth.substring(0, resizerWidth.length - 2);
 
-var isResizing = false;
-
-window.addEventListener("mousedown", (event) => {
-  if (event.target.classList.contains("resize")) {
+let isResizing = false;
+let pointerId, pos, target;
+window.addEventListener("pointerdown", (event) => {
+  if (event.target.classList.contains("resize") || event.target.classList.contains("resize-thumb")) {
+    pointerId = event.pointerId;
+    pos = { x: event.x, y: event.y };
     isResizing = true;
+    target = event.target;
     resizingWait(true);
   }
 });
-
-window.addEventListener("mousemove", (event) => {
+window.addEventListener("pointermove", (event) => {
+  if (pointerId !== event.pointerId) {
+    isResizing = false;
+    return;
+  }
   if (isResizing && event.x > document.body.clientWidth * 0.3 && event.x < document.body.clientWidth * 0.8) {
-    resizeEl.style.left = event.x - resizerWidth / 2 + "px";
+    // resizeEl.style.left = event.x - resizerWidth / 2 + "px";
     editorEl.style.width = event.x - resizerWidth / 2 + "px";
     renderedEl.style.width = document.body.clientWidth - event.x - resizerWidth / 2 + "px";
     editorCanvas.setAttribute("width", event.x - resizerWidth / 2);
     renderCanvas.setAttribute("width", document.body.clientWidth - event.x - resizerWidth / 2);
   }
 });
-
-window.addEventListener("mouseup", (event) => {
-  if (isResizing) {
+window.addEventListener("pointerup", (event) => {
+  if (isResizing && pointerId === event.pointerId) {
     isResizing = false;
     resizingWait(false);
   }
 });
 
-function resizingWait(status) {
+const resizingWait = (status) => {
   if (status) {
-    for (var el of refAll(".resizing-overlay")) {
+    for (const el of refAll(".resizing-overlay")) {
       el.style.visibility = "visible";
     }
   } else {
-    for (var el of refAll(".resizing-overlay")) {
+    for (const el of refAll(".resizing-overlay")) {
       el.style.visibility = "hidden";
       redraw();
       renderOutput();
     }
   }
-}
+};
 
 const toolboxSectionClickHandler = (e) => {
   const name = e.target.dataset.category;
