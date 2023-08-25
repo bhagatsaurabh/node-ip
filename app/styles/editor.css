@@ -1,21 +1,27 @@
+:root {
+  --resizer-width: 8px;
+}
+
+.editor-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
 .editor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: calc(60% - 2px);
+  position: relative;
+  width: calc(60% - var(--resizer-width) / 2 - 1px);
   height: 100%;
   background-color: rgb(143, 142, 142);
   z-index: 5;
 }
 
 .resize {
-  position: absolute;
-  top: 0;
-  left: calc(60% - 4px);
+  position: relative;
   width: 8px;
   height: 100%;
   background-color: rgb(209, 209, 209);
-  box-sizing: border-box;
   border: 1px solid rgb(58, 58, 58);
   cursor: ew-resize;
   display: flex;
@@ -26,15 +32,24 @@
 .resize-icon {
   pointer-events: none;
 }
+.resize-thumb {
+  background-color: white;
+  width: 2.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 0.5rem;
+  box-shadow: 0 0 10px 0px #3b3b3b;
+  opacity: 0.8;
+  user-select: none;
+}
 
 .rendered {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: calc(40% - 4px);
+  position: relative;
+  width: calc(40% - var(--resizer-width) / 2 + 1px);
   height: 100%;
   background-color: aliceblue;
   z-index: 5;
+  left: -1px;
 }
 .resizing-overlay {
   user-select: none;

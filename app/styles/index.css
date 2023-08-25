@@ -1,4 +1,5 @@
 @import "./toolbox.css";
+@import "./editor.css";
 
 * {
   box-sizing: border-box;
