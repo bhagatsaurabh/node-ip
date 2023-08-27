@@ -1,5 +1,5 @@
 :root {
-  --resizer-width: 8px;
+  --resizer-thickness: 8px;
 }
 
 .editor-container {
@@ -11,7 +11,7 @@
 
 .editor {
   position: relative;
-  width: calc(60% - var(--resizer-width) / 2 - 1px);
+  width: calc(60% - var(--resizer-thickness) / 2 - 1px);
   height: 100%;
   background-color: rgb(143, 142, 142);
   z-index: 5;
@@ -19,7 +19,7 @@
 
 .resize {
   position: relative;
-  width: 8px;
+  width: var(--resizer-thickness);
   height: 100%;
   background-color: rgb(209, 209, 209);
   border: 1px solid rgb(58, 58, 58);
@@ -33,6 +33,7 @@
   pointer-events: none;
 }
 .resize-thumb {
+  display: none;
   background-color: white;
   width: 2.5rem;
   cursor: pointer;
@@ -45,15 +46,14 @@
 
 .rendered {
   position: relative;
-  width: calc(40% - var(--resizer-width) / 2 + 1px);
+  width: calc(40% - var(--resizer-thickness) / 2 + 1px);
   height: 100%;
   background-color: aliceblue;
   z-index: 5;
   left: -1px;
 }
-.resizing-overlay {
+.overlay {
   user-select: none;
-  z-index: 10;
   background-color: rgb(151, 151, 151);
   color: rgb(241, 241, 241);
   display: flex;
@@ -68,24 +68,45 @@
   visibility: hidden;
   pointer-events: none;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.2em;
+  font-size: 1.2rem;
 }
-.rendering-overlay {
-  user-select: none;
+.overlay.show {
+  visibility: visible;
+}
+.overlay.resizing {
+  z-index: 10;
+}
+.overlay.rendering {
   z-index: 9;
-  background-color: rgb(151, 151, 151);
-  color: rgb(241, 241, 241);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.9;
-  visibility: hidden;
-  pointer-events: none;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+  .resize-thumb {
+    display: block;
+    transform: rotateZ(90deg);
+  }
+
+  .editor-container {
+    flex-direction: column;
+  }
+
+  .editor {
+    height: calc(60% - var(--resizer-thickness) / 2 - 1px);
+    width: 100%;
+  }
+
+  .resize {
+    height: var(--resizer-thickness);
+    width: 100%;
+  }
+  .resize-icon {
+    display: none;
+  }
+
+  .rendered {
+    height: calc(40% - var(--resizer-thickness) / 2 + 1px);
+    width: 100%;
+    left: 0px;
+    top: -1px;
+  }
 }
