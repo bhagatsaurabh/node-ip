@@ -1,70 +1,121 @@
-import { init, refAll, refOne } from "./utility.mjs";
+import { init, refAll, refOne, isInRange, throttle } from "./utility.mjs";
 
 init();
 refAll(".toolbox .toolbox-category").forEach((el) => (el.style.visibility = "hidden"));
 
-const resizeEl = refOne(".resize");
 const editorEl = refOne(".editor");
 const renderedEl = refOne(".rendered");
-
 const editorCanvas = refOne("#editorCanvas");
 const renderCanvas = refOne("#renderCanvas");
-
 const toolboxEl = refOne(".toolbox");
 
-const { width: editorCanvasWidth, height: editorCanvasHeight } = getComputedStyle(editorEl);
-const { width: renderCanvasWidth, height: renderCanvasHeight } = getComputedStyle(renderedEl);
+const handleCanvasResize = throttle((entries) => {
+  entries.forEach((entry) => {
+    entry.target.width = entry.contentRect.width;
+    entry.target.height = entry.contentRect.height;
+  });
+}, 100);
+const resizeObserver = new ResizeObserver(handleCanvasResize);
 
-editorCanvas.setAttribute("width", editorCanvasWidth.substring(0, editorCanvasWidth.length - 2));
-editorCanvas.setAttribute("height", editorCanvasHeight.substring(0, editorCanvasHeight.length - 2));
-renderCanvas.setAttribute("width", renderCanvasWidth.substring(0, renderCanvasWidth.length - 2));
-renderCanvas.setAttribute("height", renderCanvasHeight.substring(0, renderCanvasHeight.length - 2));
+resizeObserver.observe(editorCanvas);
+resizeObserver.observe(renderCanvas);
 
-let resizerWidth = getComputedStyle(resizeEl).width;
-resizerWidth = resizerWidth.substring(0, resizerWidth.length - 2);
+let resizerThickness = getComputedStyle(refOne(":root")).getPropertyValue("--resizer-thickness");
+resizerThickness = parseInt(resizerThickness.slice(0, -2));
+
+let layout;
+const mqList = window.matchMedia("(max-width: 768px)");
+const resetLayout = () => {
+  if (layout === "horizontal") {
+    editorEl.style.width = visualViewport.width * 0.6 - resizerThickness / 2 - 1 + "px";
+    editorEl.style.height = "100%";
+    renderedEl.style.width = visualViewport.width * 0.4 - resizerThickness / 2 + 1 + "px";
+    renderedEl.style.height = "100%";
+    editorCanvas.width = editorEl.style.width.slice(0, -2);
+    editorCanvas.height = visualViewport.height;
+    renderCanvas.width = renderedEl.style.width.slice(0, -2);
+    renderCanvas.height = visualViewport.height;
+  } else if (layout === "vertical") {
+    editorEl.style.height = visualViewport.height * 0.6 - resizerThickness / 2 - 1 + "px";
+    editorEl.style.width = "100%";
+    renderedEl.style.height = visualViewport.height * 0.4 - resizerThickness / 2 + 1 + "px";
+    renderedEl.style.width = "100%";
+    editorCanvas.height = editorEl.style.height.slice(0, -2);
+    editorCanvas.width = visualViewport.width;
+    renderCanvas.height = renderedEl.style.height.slice(0, -2);
+    renderCanvas.width = visualViewport.width;
+  }
+};
+const handleMediaChange = (event) => {
+  if (event.matches) layout = "vertical";
+  else layout = "horizontal";
+  resetLayout();
+};
+mqList.addEventListener("change", handleMediaChange);
+handleMediaChange({ matches: mqList.matches });
 
 let isResizing = false;
 let pointerId, pos, target;
-window.addEventListener("pointerdown", (event) => {
+const handleResizeStart = (event) => {
   if (event.target.classList.contains("resize") || event.target.classList.contains("resize-thumb")) {
+    event.stopPropagation();
     pointerId = event.pointerId;
     pos = { x: event.x, y: event.y };
     isResizing = true;
     target = event.target;
     resizingWait(true);
   }
-});
-window.addEventListener("pointermove", (event) => {
+};
+const handleResize = (event) => {
   if (pointerId !== event.pointerId) {
     isResizing = false;
     return;
   }
-  if (isResizing && event.x > document.body.clientWidth * 0.3 && event.x < document.body.clientWidth * 0.8) {
-    // resizeEl.style.left = event.x - resizerWidth / 2 + "px";
-    editorEl.style.width = event.x - resizerWidth / 2 + "px";
-    renderedEl.style.width = document.body.clientWidth - event.x - resizerWidth / 2 + "px";
-    editorCanvas.setAttribute("width", event.x - resizerWidth / 2);
-    renderCanvas.setAttribute("width", document.body.clientWidth - event.x - resizerWidth / 2);
+  if (layout === "horizontal") {
+    const clientWidth = visualViewport.width;
+    if (isResizing && isInRange(event.x, clientWidth * 0.3, clientWidth * 0.8)) {
+      editorEl.style.width = event.x - resizerThickness / 2 + "px";
+      renderedEl.style.width = clientWidth - event.x - resizerThickness / 2 + "px";
+      editorCanvas.setAttribute("width", event.x - resizerThickness / 2);
+      renderCanvas.setAttribute("width", clientWidth - event.x - resizerThickness / 2);
+    }
+  } else if (layout === "vertical") {
+    const clientHeight = visualViewport.height;
+    if (isResizing && isInRange(event.y, clientHeight * 0.3, clientHeight * 0.8)) {
+      editorEl.style.height = event.y - resizerThickness / 2 + "px";
+      renderedEl.style.height = clientHeight - event.y - resizerThickness / 2 + "px";
+      editorCanvas.setAttribute("height", event.y - resizerThickness / 2);
+      renderCanvas.setAttribute("height", clientHeight - event.y - resizerThickness / 2);
+    }
   }
-});
-window.addEventListener("pointerup", (event) => {
+};
+const handleResizeFinish = (event) => {
   if (isResizing && pointerId === event.pointerId) {
     isResizing = false;
     resizingWait(false);
   }
+};
+window.addEventListener("pointerdown", handleResizeStart);
+window.addEventListener("pointermove", handleResize);
+window.addEventListener("pointerup", handleResizeFinish);
+window.addEventListener("contextmenu", (event) => {
+  if (event.target.classList.contains("resize") || event.target.classList.contains("resize-thumb")) {
+    event.preventDefault();
+  }
 });
 
 const resizingWait = (status) => {
-  if (status) {
-    for (const el of refAll(".resizing-overlay")) {
-      el.style.visibility = "visible";
+  for (const el of refAll(".overlay")) {
+    if (status) {
+      el.classList.add("show");
+    } else {
+      el.classList.remove("show");
     }
-  } else {
-    for (const el of refAll(".resizing-overlay")) {
-      el.style.visibility = "hidden";
-      redraw();
-      renderOutput();
-    }
+  }
+
+  if (!status) {
+    redraw();
+    renderOutput();
   }
 };
 

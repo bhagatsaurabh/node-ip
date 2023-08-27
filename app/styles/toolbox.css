@@ -9,7 +9,7 @@
   width: var(--toolbox-width);
   height: 100%;
   background-color: rgb(194, 194, 194);
-  z-index: 14;
+  z-index: 20;
   transition: left 0.15s linear, box-shadow 0.15s linear;
   box-shadow: 0 0 0px 0px #000;
 }
@@ -43,7 +43,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   background-color: rgb(153, 153, 153);
-  padding: 1vh;
+  padding: 0.5rem;
   opacity: 0;
   transition: opacity 0.15s linear;
   overflow-x: hidden;
@@ -73,20 +73,17 @@
 .toolbox .heading {
   left: 100%;
   position: relative;
-  font-size: 0.75em;
+  font-size: 0.75rem;
   writing-mode: vertical-rl;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-  padding-top: 1vw;
-  padding-bottom: 1vw;
-  padding-left: 0.2vw;
-  padding-right: 0.2vw;
-  border-top-right-radius: 1vh;
-  border-bottom-right-radius: 1vh;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.15rem 0.5rem 0.25rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
   box-shadow: 4px 0px 8px -3px;
   background-color: rgb(153, 153, 153);
   font-weight: bold;
@@ -110,7 +107,7 @@
   padding: 0.5rem;
   background-color: transparent;
   position: relative;
-  margin-bottom: 1vh;
+  margin-bottom: 0.5rem;
   cursor: pointer;
   border: 1px solid #000;
   box-shadow: 0px 0px 0px 0px;
@@ -130,21 +127,16 @@
 }
 .item-container .tooltip {
   font-size: 0.7rem;
-  padding-left: 2.5vh;
-  padding-right: 2.5vh;
-  padding-top: 0.5vh;
-  padding-bottom: 0.5vh;
+  padding: 1.25rem 0.25rem 1.25rem 0.25rem;
   visibility: hidden;
   background-color: #555;
   color: #fff;
   text-align: center;
   border-radius: 999px;
-
   position: absolute;
   top: 30%;
   left: 120%;
   z-index: 1;
-
   opacity: 0;
   transition: opacity 0.2s;
   transition-delay: 0.5s;
@@ -152,4 +144,11 @@
 .item-container:hover > .tooltip {
   visibility: visible;
   opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .toolbox .heading {
+    padding: 0.75rem 0.25rem 0.75rem 0.25rem;
+    font-size: 1rem;
+  }
 }

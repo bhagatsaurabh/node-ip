@@ -13,7 +13,7 @@ var tempContext = tempCanvas.getContext("2d");
 var renderWidth = -1,
   renderHeight = -1;
 
-const renderingOverlayEl = document.querySelector(".rendering-overlay");
+const renderingOverlayEl = document.querySelector(".overlay.rendering");
 
 var outputNode = null;
 
