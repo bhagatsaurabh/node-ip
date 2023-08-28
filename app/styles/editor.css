@@ -72,6 +72,7 @@
 }
 .overlay.show {
   visibility: visible;
+  pointer-events: all;
 }
 .overlay.resizing {
   z-index: 10;
