@@ -70,3 +70,69 @@ export const throttle = (cb, delay) => {
   };
   return throttled;
 };
+const S4 = () => {
+  return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+};
+export const guid = () => {
+  return S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4();
+};
+export const checkConnectionToOutput = (node, tree) => {
+  // If passed node IS the outputNode, then render.
+  if (node.type === "output") {
+    return true;
+  }
+  // If outputNode is not connected anywhere, no need to render.
+  for (let rNode of tree) {
+    if (rNode.node.type === "output") {
+      if (rNode.node.inputTerminals[0].connector === null) return false;
+    }
+  }
+  // If no path exists between passed node and outputNode, no need to render.
+  let queue = [];
+  let currNode;
+  queue.push(node);
+  while (queue.length) {
+    currNode = queue.shift();
+    for (let outputTerminal of currNode.outputTerminals) {
+      if (outputTerminal.connector !== null) {
+        if (outputTerminal.connector.terminalEndNode.type === "output") {
+          return true;
+        } else {
+          queue.push(outputTerminal.connector.terminalEndNode);
+        }
+      }
+    }
+  }
+
+  return false;
+};
+export const distance = (a, b) => {
+  return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
+};
+export const canConnect = (startType, endType) => {
+  if (endType.includes(startType)) return true;
+  return false;
+};
+export const extractChannels = (image) => {
+  const [channelR, channelG, channelB] = new Array(3).fill(new ImageData(image.width, image.height));
+
+  for (let i = 0; i < image.data.length; i += 4) {
+    channelR.data[i + 0] = image.data[i + 0];
+    channelR.data[i + 3] = image.data[i + 3];
+    channelR.data[i + 1] = 0;
+    channelR.data[i + 2] = 0;
+
+    channelG.data[i + 1] = image.data[i + 1];
+    channelG.data[i + 3] = image.data[i + 3];
+    channelG.data[i + 0] = 0;
+    channelG.data[i + 2] = 0;
+
+    channelB.data[i + 2] = image.data[i + 2];
+    channelB.data[i + 3] = image.data[i + 3];
+    channelB.data[i + 1] = 0;
+    channelB.data[i + 0] = 0;
+  }
+
+  return [channelR, channelG, channelB];
+};
+export const normalize = (val, min, max) => (val - min) / (max - min);

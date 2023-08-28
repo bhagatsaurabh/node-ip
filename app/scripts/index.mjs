@@ -1,3 +1,5 @@
+import { renderOutput } from "./renderer.mjs";
+import { redraw, setDimensions } from "./state/editor.mjs";
 import { init, refAll, refOne, isInRange, throttle } from "./utility.mjs";
 
 init();
@@ -13,6 +15,7 @@ const handleCanvasResize = throttle((entries) => {
   entries.forEach((entry) => {
     entry.target.width = entry.contentRect.width;
     entry.target.height = entry.contentRect.height;
+    setDimensions({ x: entry.target.width, y: entry.target.height }, entry.target.id);
   });
 }, 100);
 const resizeObserver = new ResizeObserver(handleCanvasResize);
