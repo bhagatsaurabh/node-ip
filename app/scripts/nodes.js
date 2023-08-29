@@ -668,7 +668,7 @@ CombineChannelNode.prototype.update = function () {
   this.node.update();
 };
 
-var ColorConvertNode = function (x, y, width, order, hPadding, vSpacing) {
+/* var ColorConvertNode = function (x, y, width, order, hPadding, vSpacing) {
   this.guid = getNewGUID();
   this.config = {
     convertTo: "hsv",
@@ -700,7 +700,7 @@ var ColorConvertNode = function (x, y, width, order, hPadding, vSpacing) {
   this.node.addComponent(newChoiceGroup);
 
   this.draw();
-};
+}; */
 
 var OutputNode = function (x, y, width, order, hPadding, vSpacing) {
   this.guid = getNewGUID();

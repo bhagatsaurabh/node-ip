@@ -163,3 +163,9 @@ refAll(".toolbox .toolbox-category").forEach((el) =>
 for (const heading of refAll(".toolbox .heading")) {
   heading.addEventListener("click", toolboxSectionClickHandler);
 }
+
+refAll(".item-container").forEach((el) => {
+  el.addEventListener("dragstart", (e) => {
+    e.dataTransfer.setData("new-node", e.target.dataset.name);
+  });
+});
