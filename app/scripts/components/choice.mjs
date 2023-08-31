@@ -1,11 +1,11 @@
-import { globalBaseHeight, globalFontSize, redraw, wasDragging } from "../state/editor.mjs";
+import { redraw, props } from "../state/editor.mjs";
 
-export class Choice {
+export default class Choice {
   constructor(choiceNames, defaultIndex, onChange) {
     this.type = "choicegroup";
     this.choiceNames = choiceNames;
     this.selectedChoiceIndex = defaultIndex;
-    this.choiceHeight = globalBaseHeight;
+    this.choiceHeight = props.globalBaseHeight;
     this.height = this.choiceNames.length * this.choiceHeight;
     this.choiceBoxSize = this.choiceHeight * 0.6;
     this.onChange = onChange;
@@ -58,7 +58,7 @@ export class Choice {
           this.height / 2 +
           this.choiceHeight / 2 +
           choiceIndex * this.choiceHeight +
-          globalFontSize / 3
+          props.globalFontSize / 3
       );
     }
   }
@@ -77,7 +77,7 @@ export class Choice {
       pos.y > this.parent.y - this.parent.height / 2 + this.y - this.height / 2 &&
       pos.y < this.parent.y - this.parent.height / 2 + this.y + this.height / 2
     ) {
-      if (wasDragging) return;
+      if (props.wasDragging) return;
       const clickedIndex = Math.floor(
         (pos.y - (this.parent.y - this.parent.height / 2 + this.y - this.height / 2)) / this.choiceHeight
       );

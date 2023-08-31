@@ -1,7 +1,7 @@
 import { unit } from "../state/editor.mjs";
 import { extractChannels } from "../utility.mjs";
 
-export class Thumbnail {
+export default class Thumbnail {
   constructor(height, onImageChange) {
     this.type = "thumbnail";
     this.height = height;

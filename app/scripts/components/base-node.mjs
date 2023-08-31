@@ -1,20 +1,15 @@
-import {
-  globalBaseHeight,
-  globalFontSize,
-  globalOutlineWidth,
-  globalRadius,
-  redraw,
-  selectedNodes,
-} from "../state/editor.mjs";
+import { redraw, props } from "../state/editor.mjs";
+import { guid } from "../utility.mjs";
 
-export class BaseNode {
+export default class BaseNode {
   constructor(x, y, width, order, type, heading, color, hPadding, vSpacing, inputTerminals, outputTerminals) {
+    this.guid = guid();
     this.x = x;
     this.y = y;
     this.width = width;
     this.originalWidth = width;
-    this.radius = globalRadius;
-    this.height = this.radius + globalBaseHeight + vSpacing * 3;
+    this.radius = props.globalRadius;
+    this.height = this.radius + props.globalBaseHeight + vSpacing * 3;
     this.order = order;
     this.type = type;
     this.heading = heading;
@@ -34,18 +29,20 @@ export class BaseNode {
     [...this.inputTerminals, ...this.outputTerminals].forEach((terminal) => (terminal.parent = this));
   }
   draw(ctx) {
+    this.update();
+
     ctx.roundRect(this.x, this.y, this.width, this.height, this.radius);
-    ctx.lineWidth = globalOutlineWidth.toString();
+    ctx.lineWidth = props.globalOutlineWidth.toString();
     ctx.fillStyle = "#dededeaa";
-    ctx.strokeStyle = selectedNodes.includes(this) ? "#add8e6" : "#444";
+    ctx.strokeStyle = props.selectedNodes.includes(this) ? "#add8e6" : "#444";
     ctx.fill();
     ctx.stroke();
 
     ctx.roundUpperRect(
       this.x,
-      this.y - this.height / 2 + globalOutlineWidth + (this.radius + globalBaseHeight) / 2,
+      this.y - this.height / 2 + props.globalOutlineWidth + (this.radius + props.globalBaseHeight) / 2,
       this.width - 4,
-      this.radius + globalBaseHeight,
+      this.radius + props.globalBaseHeight,
       this.radius
     );
     ctx.lineWidth = "1";
@@ -54,17 +51,17 @@ export class BaseNode {
     ctx.fill();
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(this.x - this.width / 2, this.y - this.height / 2 + this.radius + globalBaseHeight - 1);
-    ctx.lineTo(this.x + this.width / 2, this.y - this.height / 2 + this.radius + globalBaseHeight - 1);
+    ctx.moveTo(this.x - this.width / 2, this.y - this.height / 2 + this.radius + props.globalBaseHeight - 1);
+    ctx.lineTo(this.x + this.width / 2, this.y - this.height / 2 + this.radius + props.globalBaseHeight - 1);
     ctx.strokeStyle = "#000000aa";
     ctx.stroke();
 
-    ctx.font = "bold " + globalFontSize + "px arial";
+    ctx.font = "bold " + props.globalFontSize + "px arial";
     ctx.fillStyle = "#000000aa";
     ctx.fillText(
       this.heading,
       this.x - this.width / 2 + this.width * 0.1,
-      this.y - this.height / 2 + globalOutlineWidth + (this.radius + globalBaseHeight) / 2
+      this.y - this.height / 2 + props.globalOutlineWidth + (this.radius + props.globalBaseHeight) / 2
     );
 
     this.components.forEach((component) => component.draw());
@@ -83,8 +80,8 @@ export class BaseNode {
         this.inputTerminals[i].y =
           this.y -
           this.height / 2 +
-          (this.radius + globalOutlineWidth + globalBaseHeight + this.vSpacing * 3) +
-          i * globalBaseHeight;
+          (this.radius + props.globalOutlineWidth + props.globalBaseHeight + this.vSpacing * 3) +
+          i * props.globalBaseHeight;
       }
     }
     if (this.outputTerminals) {
@@ -93,8 +90,8 @@ export class BaseNode {
         this.outputTerminals[i].y =
           this.y -
           this.height / 2 +
-          (this.radius + globalOutlineWidth + globalBaseHeight + this.vSpacing * 3) +
-          i * globalBaseHeight;
+          (this.radius + props.globalOutlineWidth + props.globalBaseHeight + this.vSpacing * 3) +
+          i * props.globalBaseHeight;
       }
     }
   }
@@ -119,9 +116,9 @@ export class BaseNode {
       component.y =
         this.y -
         this.height / 2 +
-        globalOutlineWidth +
+        props.globalOutlineWidth +
         this.radius +
-        globalBaseHeight +
+        props.globalBaseHeight +
         this.vSpacing +
         component.height / 2;
     }
@@ -182,6 +179,16 @@ export class BaseNode {
     for (let component of this.components) {
       if (component.clicked(pos)) break;
     }
+  }
+  checkBounds(x, y) {
+    if (
+      x > this.x - this.width / 2 - props.globalTerminalRadius / 2 &&
+      x < this.x + this.width / 2 + props.globalTerminalRadius / 2 &&
+      y > this.y - this.height / 2 &&
+      y < this.y + this.height / 2
+    )
+      return true;
+    return false;
   }
   checkSliderBounds(pos) {
     let sliderC;

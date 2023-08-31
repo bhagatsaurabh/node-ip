@@ -1,4 +1,4 @@
-export class Row {
+export default class Row {
   constructor(height, components, spacing, weights) {
     this.sliders = [];
     this.type = "row";
