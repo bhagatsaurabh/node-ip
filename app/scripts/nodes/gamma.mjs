@@ -3,6 +3,7 @@ import Terminal from "../components/terminal.mjs";
 import Slider from "../components/slider.mjs";
 import Row from "../components/row.mjs";
 import Label from "../components/label.mjs";
+import { ctx, props } from "../state/editor.mjs";
 
 export default class GammaNode extends BaseNode {
   constructor(x, y, width, order, hPadding, vSpacing) {
@@ -44,6 +45,6 @@ export default class GammaNode extends BaseNode {
       })
     );
 
-    this.draw();
+    this.draw(ctx);
   }
 }

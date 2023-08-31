@@ -1,6 +1,7 @@
 import BaseNode from "../components/base-node.mjs";
 import Terminal from "../components/terminal.mjs";
 import Row from "../components/row.mjs";
+import { ctx, props } from "../state/editor.mjs";
 
 export default class CombineChannelNode extends BaseNode {
   constructor(x, y, width, order, hPadding, vSpacing) {
@@ -32,6 +33,6 @@ export default class CombineChannelNode extends BaseNode {
     this.addComponent(new Row(props.globalBaseHeight, [], 5));
     this.addComponent(new Row(props.globalBaseHeight, [], 5));
 
-    this.draw();
+    this.draw(ctx);
   }
 }

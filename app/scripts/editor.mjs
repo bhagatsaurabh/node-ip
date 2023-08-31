@@ -1,8 +1,8 @@
-import { dimensions, unit, props, redraw, ctx, redrawWithDelta } from "./state/editor.mjs";
+import { dimensions, props, redraw, ctx, redrawWithDelta } from "./state/editor.mjs";
 import { nodes } from "./state/nodes.mjs";
 import { 𝜏 } from "./constants.mjs";
-import { checkConnectionToOutput, distance, getPos } from "./utility.mjs";
-import * as nodeTypes from "./nodes";
+import { checkConnectionToOutput, distance, getPos, refOne } from "./utility.mjs";
+import * as nodeTypes from "./nodes/index.mjs";
 
 const downScaleStep = 0.9;
 const upScaleStep = 1.1;
@@ -24,13 +24,13 @@ let isContextMenuOpened = false; */
 const pushOutputNode = () => {
   const width = dimensions.x * 0.2 * props.globalScaleRatio;
   nodes.push(
-    new OutputNode(
+    new nodeTypes.OutputNode(
       dimensions.x / 2 - width / 2,
       dimensions.y / 2,
       width,
       nodes.length,
-      unit * 1.5,
-      unit * 0.7
+      props.unit * 1.5,
+      props.unit * 0.7
     )
   );
   redraw();
@@ -183,7 +183,7 @@ const handleZoom = (type, pos) => {
   props.globalFontSize *= props.gSFactor;
   props.globalRadius *= props.gSFactor;
   props.globalTerminalRadius *= props.gSFactor;
-  unit *= props.gSFactor;
+  props.unit *= props.gSFactor;
   props.globalBaseHeight *= props.gSFactor;
   props.globalConnectorBezierOffset *= props.gSFactor;
   props.globalConnectorWidth *= props.gSFactor;
@@ -235,51 +235,51 @@ const handleDrop = (nodeName, absPos) => {
   switch (nodeName) {
     case "image": {
       width = dimensions.x * 0.3 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.ImageSourceNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.ImageSourceNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
       break;
     }
     case "grayscale": {
       width = dimensions.x * 0.15 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.GrayscaleNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.GrayscaleNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
       break;
     }
     case "binarize": {
-      width = dimensions.x * 0.3 * globalScaleRatio;
-      nodes.unshift(new nodeTypes.BinarizeNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      width = dimensions.x * 0.3 * props.globalScaleRatio;
+      nodes.unshift(new nodeTypes.BinarizeNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
       break;
     }
     case "layer": {
       width = dimensions.x * 0.3 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.LayerNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.LayerNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
       break;
     }
     case "combinechannel": {
       width = dimensions.x * 0.2 * props.globalScaleRatio;
       nodes.unshift(
-        new nodeTypes.CombineChannelNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7)
+        new nodeTypes.CombineChannelNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
       );
       break;
     }
     case "brightness": {
       width = dimensions.x * 0.25 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.BrightnessNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.BrightnessNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
       break;
     }
     case "contrast": {
       width = dimensions.x * 0.25 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.ContrastNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.ContrastNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
       break;
     }
     case "reducepalette": {
       width = dimensions.x * 0.18 * props.globalScaleRatio;
       nodes.unshift(
-        new nodeTypes.ReducePaletteNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7)
+        new nodeTypes.ReducePaletteNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
       );
       break;
     }
     case "gamma": {
       width = dimensions.x * 0.25 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.GammaNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.GammaNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
       break;
     }
     default:

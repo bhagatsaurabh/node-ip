@@ -1,9 +1,9 @@
-import { nodes } from "./state/nodes.mjs";
-import { guid, checkConnectionToOutput, distance, canConnect } from "./utility.mjs";
-import { 𝜏 } from "./constants.mjs";
+import { nodes } from "../state/nodes.mjs";
 import { redraw, props } from "../state/editor.mjs";
-import { removeConnector } from "./state/connectors.mjs";
-import { renderOutput } from "./renderer.mjs";
+import { removeConnector } from "../state/connectors.mjs";
+import { guid, checkConnectionToOutput, distance, canConnect } from "../utility.mjs";
+import { 𝜏 } from "../constants.mjs";
+import { renderOutput } from "../renderer.mjs";
 import { Connector } from "./connector.mjs";
 
 export default class Terminal {

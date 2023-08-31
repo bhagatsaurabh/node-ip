@@ -1,5 +1,5 @@
-import { unit } from "../state/editor.mjs";
 import { extractChannels } from "../utility.mjs";
+import { ctx as ectx, props } from "../state/editor.mjs";
 
 export default class Thumbnail {
   constructor(height, onImageChange) {
@@ -8,7 +8,7 @@ export default class Thumbnail {
     this.image = document.createElement("img");
     this.imageData = null;
     this.image.crossOrigin = "Anonymous";
-    this.image.src = "../../assets/icons/image.png";
+    this.image.src = "/app/assets/icons/image.png";
     this.onImageChange = onImageChange;
 
     this.setup();
@@ -23,7 +23,7 @@ export default class Thumbnail {
       ctx.drawImage(this.image, 0, 0);
       this.imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       this.onImageChange(this.imageData, extractChannels(this.imageData));
-      this.draw();
+      this.draw(ectx);
     };
 
     this.htmlInput = document.createElement("input");
@@ -39,7 +39,7 @@ export default class Thumbnail {
       );
       fileReader.onload = (e) => (this.image.src = e.target.result);
       fileReader.readAsDataURL(event.path[0].files[0]);
-      this.draw();
+      this.draw(ectx);
     };
   }
   draw(ctx) {
@@ -79,8 +79,8 @@ export default class Thumbnail {
       imageHeight = this.image.height;
     }
 
-    imageWidth -= unit / 2;
-    imageHeight -= unit / 2;
+    imageWidth -= props.unit / 2;
+    imageHeight -= props.unit / 2;
 
     ctx.drawImage(
       this.image,
