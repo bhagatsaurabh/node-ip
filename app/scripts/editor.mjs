@@ -2,6 +2,7 @@ import { dimensions, unit, props, redraw, ctx, redrawWithDelta } from "./state/e
 import { nodes } from "./state/nodes.mjs";
 import { 𝜏 } from "./constants.mjs";
 import { checkConnectionToOutput, distance, getPos } from "./utility.mjs";
+import * as nodeTypes from "./nodes";
 
 const downScaleStep = 0.9;
 const upScaleStep = 1.1;
@@ -50,7 +51,7 @@ editorCanvas.addEventListener("keyup", (e) => {
 editorCanvas.addEventListener("dragover", (e) => e.preventDefault());
 editorCanvas.addEventListener("drop", (e) => {
   e.preventDefault();
-  props.globalScaleRatio = nodes.length > 0 ? nodes[0].node.scaleRatio : 1;
+  props.globalScaleRatio = nodes.length > 0 ? nodes[0].scaleRatio : 1;
 
   handleDrop(e.dataTransfer.getData("new-node"), { x: e.clientX, y: e.clientY });
 });
@@ -77,22 +78,22 @@ editorCanvas.addEventListener("pointerdown", (e) => {
   } else {
     const node = getNodeFromPos(pos);
     if (node) {
-      currSlider = node.node.checkSliderBounds(pos);
+      currSlider = node.checkSliderBounds(pos);
     }
     if (currSlider) {
       sliderDragFlag = 1;
     } else if (node && nodeDragFlag === 0) {
       nodeDragFlag = 1;
       if (shiftStatus) {
-        props.selectedNodes.push(node.node);
+        props.selectedNodes.push(node);
       } else {
         props.selectedNodes = [];
-        props.selectedNodes.push(node.node);
+        props.selectedNodes.push(node);
       }
 
-      const order = node.node.order;
-      node.node.order = nodes[nodes.length - 1].node.order;
-      nodes[nodes.length - 1].node.order = order;
+      const order = node.order;
+      node.order = nodes[nodes.length - 1].order;
+      nodes[nodes.length - 1].order = order;
 
       const index = nodes.indexOf(node);
       nodes[index] = nodes[nodes.length - 1];
@@ -101,7 +102,7 @@ editorCanvas.addEventListener("pointerdown", (e) => {
       redraw(true);
 
       currDragNode = node;
-      dragDelta = { x: currDragNode.node.x - pos.x, y: currDragNode.node.y - pos.y };
+      dragDelta = { x: currDragNode.x - pos.x, y: currDragNode.y - pos.y };
     } else {
       panStart = { x: pos.x, y: pos.y };
       panFlag = 1;
@@ -124,8 +125,8 @@ editorCanvas.addEventListener("pointermove", (e) => {
     }
   } else {
     if (currDragNode && sliderDragFlag === 0) {
-      currDragNode.node.x = pos.x + dragDelta.x;
-      currDragNode.node.y = pos.y + dragDelta.y;
+      currDragNode.x = pos.x + dragDelta.x;
+      currDragNode.y = pos.y + dragDelta.y;
       redraw(true);
       props.wasDragging = true;
     }
@@ -189,18 +190,18 @@ const handleZoom = (type, pos) => {
   props.globalOutlineWidth *= props.gSFactor;
 
   for (let node of nodes) {
-    if (node.node.x > pos.x && node.node.y > pos.y) {
-      node.node.x = pos.x + props.gSFactor * Math.abs(pos.x - node.node.x);
-      node.node.y = pos.y + props.gSFactor * Math.abs(pos.y - node.node.y);
-    } else if (node.node.x > pos.x && node.node.y < pos.y) {
-      node.node.x = pos.x + props.gSFactor * Math.abs(pos.x - node.node.x);
-      node.node.y = pos.y - props.gSFactor * Math.abs(pos.y - node.node.y);
-    } else if (node.node.x < pos.x && node.node.y > pos.y) {
-      node.node.x = pos.x - props.gSFactor * Math.abs(pos.x - node.node.x);
-      node.node.y = pos.y + props.gSFactor * Math.abs(pos.y - node.node.y);
-    } else if (node.node.x < pos.x && node.node.y < pos.y) {
-      node.node.x = pos.x - props.gSFactor * Math.abs(pos.x - node.node.x);
-      node.node.y = pos.y - props.gSFactor * Math.abs(pos.y - node.node.y);
+    if (node.x > pos.x && node.y > pos.y) {
+      node.x = pos.x + props.gSFactor * Math.abs(pos.x - node.x);
+      node.y = pos.y + props.gSFactor * Math.abs(pos.y - node.y);
+    } else if (node.x > pos.x && node.y < pos.y) {
+      node.x = pos.x + props.gSFactor * Math.abs(pos.x - node.x);
+      node.y = pos.y - props.gSFactor * Math.abs(pos.y - node.y);
+    } else if (node.x < pos.x && node.y > pos.y) {
+      node.x = pos.x - props.gSFactor * Math.abs(pos.x - node.x);
+      node.y = pos.y + props.gSFactor * Math.abs(pos.y - node.y);
+    } else if (node.x < pos.x && node.y < pos.y) {
+      node.x = pos.x - props.gSFactor * Math.abs(pos.x - node.x);
+      node.y = pos.y - props.gSFactor * Math.abs(pos.y - node.y);
     }
   }
   for (let node of nodes) {
@@ -222,9 +223,9 @@ const getNodeFromPos = (pos) => {
   });
   const highestOrder = Math.max.apply(
     Math,
-    inbounds.map((o) => o.node.order)
+    inbounds.map((o) => o.order)
   );
-  return inbounds.find((o) => o.node.order === highestOrder);
+  return inbounds.find((o) => o.order === highestOrder);
 };
 
 const handleDrop = (nodeName, absPos) => {
@@ -234,47 +235,51 @@ const handleDrop = (nodeName, absPos) => {
   switch (nodeName) {
     case "image": {
       width = dimensions.x * 0.3 * props.globalScaleRatio;
-      nodes.unshift(new ImageSourceNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.ImageSourceNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
       break;
     }
     case "grayscale": {
       width = dimensions.x * 0.15 * props.globalScaleRatio;
-      nodes.unshift(new GrayscaleNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.GrayscaleNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
       break;
     }
     case "binarize": {
       width = dimensions.x * 0.3 * globalScaleRatio;
-      nodes.unshift(new BinarizeNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.BinarizeNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
       break;
     }
     case "layer": {
       width = dimensions.x * 0.3 * props.globalScaleRatio;
-      nodes.unshift(new LayerNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.LayerNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
       break;
     }
     case "combinechannel": {
       width = dimensions.x * 0.2 * props.globalScaleRatio;
-      nodes.unshift(new CombineChannelNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(
+        new nodeTypes.CombineChannelNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7)
+      );
       break;
     }
     case "brightness": {
       width = dimensions.x * 0.25 * props.globalScaleRatio;
-      nodes.unshift(new BrightnessNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.BrightnessNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
       break;
     }
     case "contrast": {
       width = dimensions.x * 0.25 * props.globalScaleRatio;
-      nodes.unshift(new ContrastNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.ContrastNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
       break;
     }
     case "reducepalette": {
       width = dimensions.x * 0.18 * props.globalScaleRatio;
-      nodes.unshift(new ReducePaletteNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(
+        new nodeTypes.ReducePaletteNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7)
+      );
       break;
     }
     case "gamma": {
       width = dimensions.x * 0.25 * props.globalScaleRatio;
-      nodes.unshift(new GammaNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
+      nodes.unshift(new nodeTypes.GammaNode(pos.x, pos.y, width, nodes.length, unit * 1.5, unit * 0.7));
       break;
     }
     default:

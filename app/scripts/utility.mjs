@@ -83,8 +83,8 @@ export const checkConnectionToOutput = (node, tree) => {
   }
   // If outputNode is not connected anywhere, no need to render.
   for (let rNode of tree) {
-    if (rNode.node.type === "output") {
-      if (rNode.node.inputTerminals[0].connector === null) return false;
+    if (rNode.type === "output") {
+      if (rNode.inputTerminals[0].connector === null) return false;
     }
   }
   // If no path exists between passed node and outputNode, no need to render.

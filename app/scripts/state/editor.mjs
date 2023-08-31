@@ -43,8 +43,8 @@ const redraw = (clear) => {
 const redrawWithDelta = (delta) => {
   ctx.clearRect(0, 0, dimensions.x, dimensions.y);
   nodes.forEach((node) => {
-    node.node.x += delta.x;
-    node.node.y += delta.y;
+    node.x += delta.x;
+    node.y += delta.y;
   });
   connectors.forEach((connector) => {
     connector.draw(connector.terminalEnd.x, connector.terminalEnd.y);

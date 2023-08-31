@@ -4,6 +4,7 @@ import { 𝜏 } from "./constants.mjs";
 import { redraw, props } from "../state/editor.mjs";
 import { removeConnector } from "./state/connectors.mjs";
 import { renderOutput } from "./renderer.mjs";
+import { Connector } from "./connector.mjs";
 
 export default class Terminal {
   constructor(type, category, radius, data, onConnect) {
