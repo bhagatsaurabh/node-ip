@@ -136,3 +136,10 @@ export const extractChannels = (image) => {
   return [channelR, channelG, channelB];
 };
 export const normalize = (val, min, max) => (val - min) / (max - min);
+export const getPos = (el, pos) => {
+  const rect = el.getBoundingClientRect();
+  return {
+    x: pos.x - rect.left,
+    y: pos.y - rect.top,
+  };
+};

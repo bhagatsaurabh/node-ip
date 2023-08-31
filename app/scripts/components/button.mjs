@@ -1,6 +1,6 @@
-import { globalFontSize } from "../state/editor.mjs";
+import { props } from "../state/editor.mjs";
 
-export class Button {
+export default class Button {
   constructor(height, label, onClick) {
     this.type = "button";
     this.height = height;
@@ -25,7 +25,7 @@ export class Button {
     ctx.fillText(
       this.label,
       this.parent.x - this.parent.width / 2 + this.x - ctx.measureText(this.label).width / 2,
-      this.parent.y - this.parent.height / 2 + this.y + globalFontSize / 3
+      this.parent.y - this.parent.height / 2 + this.y + props.globalFontSize / 3
     );
   }
   scale(factor) {

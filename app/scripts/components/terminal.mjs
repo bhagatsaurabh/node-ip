@@ -1,17 +1,11 @@
 import { nodes } from "./state/nodes.mjs";
 import { guid, checkConnectionToOutput, distance, canConnect } from "./utility.mjs";
 import { 𝜏 } from "./constants.mjs";
-import {
-  currentConnector,
-  redraw,
-  setCurrentConnector,
-  setTerminalStartFlag,
-  terminalStartFlag,
-} from "./state/editor.mjs";
+import { redraw, props } from "../state/editor.mjs";
 import { removeConnector } from "./state/connectors.mjs";
 import { renderOutput } from "./renderer.mjs";
 
-export class Terminal {
+export default class Terminal {
   constructor(type, category, radius, data, onConnect) {
     this.type = type;
     this.category = category;
@@ -51,30 +45,30 @@ export class Terminal {
   }
   clicked(pos) {
     if (distance(pos, this.pos) < this.radius) {
-      if (terminalStartFlag === 0) {
+      if (props.terminalStartFlag === 0) {
         if (this.type !== "in") {
           if (this.connector !== null) {
             this.connector.terminalEnd.connector = null;
             removeConnector(this.connector);
             this.connector = null;
           }
-          setCurrentConnector(new Connector(this, this.parent));
+          props.currentConnector = new Connector(this, this.parent);
         } else {
           return;
         }
-        setTerminalStartFlag(1);
+        props.terminalStartFlag = 1;
       } else {
         if (
-          currentConnector.terminalStart.guid === this.guid ||
-          !canConnect(currentConnector.terminalStart.category, this.category)
+          props.currentConnector.terminalStart.guid === this.guid ||
+          !canConnect(props.currentConnector.terminalStart.category, this.category)
         ) {
-          currentConnector.terminalStart.connector = null;
-          setCurrentConnector(null);
+          props.currentConnector.terminalStart.connector = null;
+          props.currentConnector = null;
           redraw(true);
         } else {
-          currentConnector.connect(this, this.parent);
+          props.currentConnector.connect(this, this.parent);
         }
-        setTerminalStartFlag(0);
+        props.terminalStartFlag = 0;
       }
     }
   }

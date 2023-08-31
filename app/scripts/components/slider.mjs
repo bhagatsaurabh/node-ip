@@ -1,8 +1,8 @@
-import { globalBaseHeight } from "../state/editor.mjs";
+import { props } from "../state/editor.mjs";
 import { normalize } from "../utility.mjs";
 import { 𝜏 } from "../constants.mjs";
 
-export class Slider {
+export default class Slider {
   constructor(height, thumbRadius, min, max, defaultValue, onChange) {
     this.type = "slider";
     this.height = height;
@@ -10,7 +10,7 @@ export class Slider {
     this.min = min;
     this.max = max;
     this.value = defaultValue;
-    this.railHeight = globalBaseHeight * 0.3;
+    this.railHeight = props.globalBaseHeight * 0.3;
     this.thumbPos = { x: 0, y: 0 };
     this.onChange = onChange;
   }

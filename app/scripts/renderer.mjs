@@ -1,6 +1,6 @@
 import { renderCtx, renderDimensions } from "./state/editor.mjs";
 import { nodes } from "./state/nodes.mjs";
-import { distance, refOne } from "./utility.mjs";
+import { distance, getPos, refOne } from "./utility.mjs";
 
 let gSFactor = 1.0;
 let scaleRatio = 1.0;
@@ -77,9 +77,9 @@ const removePointer = (e) => {
 const pointers = [];
 const prevDistance = -1;
 renderCanvas.onpointerdown = (e) => {
-  if (pointers.length === 2) return;
+  if (pointers.length >= 2) return;
 
-  pointers.push({ id: e.pointerId, pos: { x: e.clientX, y: e.clientY } });
+  pointers.push({ id: e.pointerId, pos: getPos(renderCanvas, { x: e.clientX, y: e.clientY }) });
   if (pointers.length === 2) {
     prevDistance = distance(pointers[0].pos, pointers[1].pos);
   }
