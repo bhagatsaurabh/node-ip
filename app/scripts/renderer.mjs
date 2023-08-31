@@ -15,7 +15,7 @@ const renderingOverlayEl = refOne(".overlay.rendering");
 const renderCanvas = refOne("#renderCanvas");
 
 const renderOutput = () => {
-  outputNode = nodes.find((node) => node.node.type === "output");
+  outputNode = nodes.find((node) => node.type === "output");
 
   let processor;
   if (typeof processor === "undefined") {
@@ -25,17 +25,17 @@ const renderOutput = () => {
   }
   processor.onmessage = (e) => {
     renderingOverlayEl.classList.remove("show");
-    outputNode.node.inputTerminals[0].data = e.data;
+    outputNode.inputTerminals[0].data = e.data;
     processor.terminate();
     processor = undefined;
 
     renderCtx.clearRect(0, 0, renderDimensions.x, renderDimensions.y);
-    if (outputNode.node.inputTerminals[0].data !== null) {
-      tempCanvas.width = outputNode.node.inputTerminals[0].data.width;
-      tempCanvas.height = outputNode.node.inputTerminals[0].data.height;
+    if (outputNode.inputTerminals[0].data !== null) {
+      tempCanvas.width = outputNode.inputTerminals[0].data.width;
+      tempCanvas.height = outputNode.inputTerminals[0].data.height;
       renderWidth = tempCanvas.width * scaleRatio;
       renderHeight = tempCanvas.height * scaleRatio;
-      tempContext.putImageData(outputNode.node.inputTerminals[0].data, 0, 0);
+      tempContext.putImageData(outputNode.inputTerminals[0].data, 0, 0);
       renderCtx.drawImage(
         tempCanvas,
         renderDimensions.x / 2 - renderWidth / 2,
@@ -123,7 +123,7 @@ const createTree = () => {
 
   while (stack.length) {
     const currPairNode = stack.pop();
-    switch (currPairNode.renderNode.node.type) {
+    switch (currPairNode.renderNode.type) {
       case "output": {
         break;
       }
@@ -133,7 +133,7 @@ const createTree = () => {
         if (currPairNode.processNode.dataType === "channelG") cIndex = 2;
         if (currPairNode.processNode.dataType === "channelB") cIndex = 3;
 
-        currPairNode.processNode.data = currPairNode.renderNode.node.outputTerminals[cIndex].data;
+        currPairNode.processNode.data = currPairNode.renderNode.outputTerminals[cIndex].data;
         break;
       }
       case "grayscale":
@@ -150,12 +150,12 @@ const createTree = () => {
       default:
         break;
     }
-    currPairNode.renderNode.node.inputTerminals.forEach((inputTerminal) => {
-      if (inputTerminal.connector !== null) {
+    currPairNode.renderNode.inputTerminals.forEach((inputTerminal) => {
+      if (inputTerminal.connector) {
         const childNode = new TreeNode(inputTerminal.connector.terminalStartNode.type);
         childNode.dataType = inputTerminal.connector.terminalStart.category;
         currPairNode.processNode.childs.push(childNode);
-        stack.push({ renderNode: inputTerminal.connector.terminalStartNode.parent, processNode: childNode });
+        stack.push({ renderNode: inputTerminal.connector.terminalStartNode, processNode: childNode });
       }
     });
   }
@@ -163,15 +163,15 @@ const createTree = () => {
 };
 
 refOne("#download-rendered").onclick = () => {
-  if (outputNode === null || outputNode.node.inputTerminals[0].data === null) {
+  if (outputNode === null || outputNode.inputTerminals[0].data === null) {
     alert("No Output");
     return;
   }
   const link = document.createElement("a");
   const downloadCanvas = document.createElement("canvas");
-  downloadCanvas.width = outputNode.node.inputTerminals[0].data.width;
-  downloadCanvas.height = outputNode.node.inputTerminals[0].data.height;
-  downloadCanvas.getContext("2d").putImageData(outputNode.node.inputTerminals[0].data, 0, 0);
+  downloadCanvas.width = outputNode.inputTerminals[0].data.width;
+  downloadCanvas.height = outputNode.inputTerminals[0].data.height;
+  downloadCanvas.getContext("2d").putImageData(outputNode.inputTerminals[0].data, 0, 0);
   link.download = "rendered.png";
   link.href = downloadCanvas.toDataURL();
   link.click();
