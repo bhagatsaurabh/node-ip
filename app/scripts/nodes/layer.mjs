@@ -4,7 +4,7 @@ import Label from "../components/label.mjs";
 import Slider from "../components/slider.mjs";
 import Row from "../components/row.mjs";
 import Button from "../components/button.mjs";
-import { props } from "../state/editor.mjs";
+import { ctx, props } from "../state/editor.mjs";
 
 export default class LayerNode extends BaseNode {
   constructor(x, y, width, order, hPadding, vSpacing) {
@@ -94,6 +94,6 @@ export default class LayerNode extends BaseNode {
       this.width * 0.4
     );
 
-    this.draw();
+    this.draw(ctx);
   }
 }

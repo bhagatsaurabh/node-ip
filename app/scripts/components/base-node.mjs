@@ -64,12 +64,12 @@ export default class BaseNode {
       this.y - this.height / 2 + props.globalOutlineWidth + (this.radius + props.globalBaseHeight) / 2
     );
 
-    this.components.forEach((component) => component.draw());
+    this.components.forEach((component) => component.draw(ctx));
     if (this.inputTerminals) {
-      this.inputTerminals.forEach((terminal) => terminal.draw());
+      this.inputTerminals.forEach((terminal) => terminal.draw(ctx));
     }
     if (this.outputTerminals) {
-      this.outputTerminals.forEach((terminal) => terminal.draw());
+      this.outputTerminals.forEach((terminal) => terminal.draw(ctx));
     }
     this.scaleRatio = this.width / this.originalWidth;
   }

@@ -16,7 +16,7 @@ export default class Row {
       if (component.type === "slider") this.sliders.push(component);
     });
   }
-  draw() {
+  draw(ctx) {
     if (Array.isArray(this.weights)) {
       const availableWidth = this.width - (this.components.length - 1) * this.spacing;
       let occupiedWidth = 0;
@@ -36,7 +36,7 @@ export default class Row {
         this.components[i].x = this.components[i].x - (this.x - this.width / 2);
         this.components[i].y = this.components[i].y - (this.y - this.height / 2);
 
-        this.components[i].draw();
+        this.components[i].draw(ctx);
         occupiedWidth += this.components[i].width;
       }
     } else {
@@ -57,7 +57,7 @@ export default class Row {
         this.components[i].x = this.components[i].x - (this.x - this.width / 2);
         this.components[i].y = this.components[i].y - (this.y - this.height / 2);
 
-        this.components[i].draw();
+        this.components[i].draw(ctx);
       }
     }
   }

@@ -51,7 +51,7 @@ export default class Choice {
       ctx.fillStyle = "#000000aa";
       ctx.fillText(
         this.choiceNames[choiceIndex],
-        this.parent.x - this.parent.width / 2 + this.x - this.width / 2 + this.choiceBoxSize + unit,
+        this.parent.x - this.parent.width / 2 + this.x - this.width / 2 + this.choiceBoxSize + props.unit,
         this.parent.y -
           this.parent.height / 2 +
           this.y -

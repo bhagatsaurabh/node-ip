@@ -19,9 +19,9 @@ const props = {
   globalTerminalRadius: 5,
   globalConnectorBezierOffset: dimensions.x * 0.06,
   globalConnectorWidth: dimensions.x * 0.006,
+  unit: dimensions.x * 0.01,
 };
 const renderDimensions = { x: 0, y: 0 };
-const unit = dimensions.x * 0.01;
 
 const setContext = (val) => (ctx = val);
 const setDimensions = (val, ctx) => {
@@ -38,7 +38,7 @@ const redraw = (clear) => {
 
   nodes.forEach((node) => node.update());
   connectors.forEach((connector) => connector.draw(connector.terminalEnd.x, connector.terminalEnd.y));
-  nodes.forEach((node) => node.draw());
+  nodes.forEach((node) => node.draw(ctx));
 };
 const redrawWithDelta = (delta) => {
   ctx.clearRect(0, 0, dimensions.x, dimensions.y);
@@ -51,7 +51,7 @@ const redrawWithDelta = (delta) => {
   });
   nodes.forEach((node) => {
     node.update();
-    node.draw();
+    node.draw(ctx);
   });
 };
 
@@ -61,7 +61,6 @@ export {
   dimensions,
   renderCtx,
   renderDimensions,
-  unit,
   setContext,
   redraw,
   redrawWithDelta,
