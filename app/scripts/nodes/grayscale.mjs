@@ -3,6 +3,7 @@ import Terminal from "../components/terminal.mjs";
 import BaseNode from "../components/base-node.mjs";
 import Choice from "../components/choice.mjs";
 import { checkConnectionToOutput } from "../utility.mjs";
+import { nodes } from "../state/nodes.mjs";
 
 export default class GrayscaleNode extends BaseNode {
   constructor(x, y, width, order, hPadding, vSpacing) {

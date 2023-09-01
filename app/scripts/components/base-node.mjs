@@ -159,12 +159,12 @@ export default class BaseNode {
     this.radius *= factor;
 
     if (this.inputTerminals) {
-      this.inputTerminals.forEach((terminal) => terminal.scale());
+      this.inputTerminals.forEach((terminal) => terminal.scale(factor));
     }
     if (this.outputTerminals) {
-      this.outputTerminals.forEach((terminal) => terminal.scale());
+      this.outputTerminals.forEach((terminal) => terminal.scale(factor));
     }
-    this.components.forEach((component) => component.scale());
+    this.components.forEach((component) => component.scale(factor));
 
     this.update();
   }

@@ -33,12 +33,12 @@ export default class Thumbnail {
     this.htmlInput.accept = "image/*";
     this.htmlInput.onchange = (event) => {
       const fileReader = new FileReader();
-      this.imageFileName = event.path[0].files[0].name.substring(
+      this.imageFileName = event.target.files[0].name.substring(
         0,
-        event.path[0].files[0].name.toString().lastIndexOf(".")
+        event.target.files[0].name.toString().lastIndexOf(".")
       );
       fileReader.onload = (e) => (this.image.src = e.target.result);
-      fileReader.readAsDataURL(event.path[0].files[0]);
+      fileReader.readAsDataURL(event.target.files[0]);
       this.draw(ectx);
     };
   }
