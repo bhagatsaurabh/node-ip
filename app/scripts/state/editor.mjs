@@ -12,14 +12,14 @@ const props = {
   selectedNodes: [],
   wasDragging: false,
   gSFactor: 1.0,
-  globalFontSize: dimensions.x * 0.014,
-  globalBaseHeight: dimensions.x * 0.025,
-  globalRadius: dimensions.x * 0.008,
+  globalFontSize: 14,
+  globalBaseHeight: 25,
+  globalRadius: 8,
   globalOutlineWidth: 2,
   globalTerminalRadius: 5,
-  globalConnectorBezierOffset: dimensions.x * 0.06,
-  globalConnectorWidth: dimensions.x * 0.006,
-  unit: dimensions.x * 0.01,
+  globalConnectorBezierOffset: 60,
+  globalConnectorWidth: 6,
+  unit: 10,
 };
 const renderDimensions = { x: 0, y: 0 };
 

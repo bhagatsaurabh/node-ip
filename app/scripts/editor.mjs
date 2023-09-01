@@ -205,7 +205,7 @@ const handleZoom = (type, pos) => {
     }
   }
   for (let node of nodes) {
-    node.scale();
+    node.scale(props.gSFactor);
   }
   redraw(true);
 };

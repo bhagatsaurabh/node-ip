@@ -66,7 +66,7 @@ export default class Row {
     this.height *= factor;
     this.x *= factor;
     this.y *= factor;
-    this.components.forEach((component) => component.scale());
+    this.components.forEach((component) => component.scale(factor));
   }
   clicked(pos) {
     if (

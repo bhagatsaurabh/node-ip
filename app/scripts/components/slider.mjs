@@ -29,10 +29,7 @@ export default class Slider {
     ctx.beginPath();
     ctx.fillStyle = "#3480ebff";
     const common = this.parent.x - this.parent.width / 2 + this.x;
-    // this.thumbPos.x =
-    //   normalize(this.value, this.min, this.max) * (common + this.width / 2 - (common - this.width / 2)) +
-    //   (common - this.width / 2);
-    this.thumbPos.x = normalize(this.value, this.min, this.max) * (common + this.width / 2);
+    this.thumbPos.x = (this.width / 2) * (2 * normalize(this.value, this.min, this.max) - 1) + common;
     this.thumbPos.y = this.parent.y - this.parent.height / 2 + this.y;
     ctx.arc(this.thumbPos.x, this.thumbPos.y, this.thumbRadius, 0, 𝜏);
     ctx.fill();
