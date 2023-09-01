@@ -14,7 +14,6 @@ export default class Terminal {
     this.connector = null;
     this.guid = guid();
     this.data = data;
-    this.pos = { x: 0, y: 0 };
 
     this.setup();
     if (this.type === "in") {
@@ -45,7 +44,7 @@ export default class Terminal {
     this.radius *= factor;
   }
   clicked(pos) {
-    if (distance(pos, this.pos) < this.radius) {
+    if (distance(pos, { x: this.x, y: this.y }) < this.radius) {
       if (props.terminalStartFlag === 0) {
         if (this.type !== "in") {
           if (this.connector !== null) {

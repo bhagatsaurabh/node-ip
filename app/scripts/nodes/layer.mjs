@@ -40,7 +40,7 @@ export default class LayerNode extends BaseNode {
       new Row(
         props.globalBaseHeight,
         [
-          new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.5, 0, 100, 100, (value) => {
+          new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.3, 0, 100, 100, (value) => {
             this.config.alphas[0] = value;
             label1.setLabel(this.config.alphas[0].toString());
           }),
@@ -54,7 +54,7 @@ export default class LayerNode extends BaseNode {
       new Row(
         props.globalBaseHeight,
         [
-          new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.5, 0, 100, 50, (value) => {
+          new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.3, 0, 100, 50, (value) => {
             this.config.alphas[1] = value;
             label2.setLabel(this.config.alphas[1].toString());
           }),
@@ -75,7 +75,7 @@ export default class LayerNode extends BaseNode {
           new Row(
             props.globalBaseHeight,
             [
-              new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.5, 0, 100, 50, (value) => {
+              new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.3, 0, 100, 50, (value) => {
                 this.config.alphas[index] = value;
                 label.setLabel(this.config.alphas[index].toString());
               }),

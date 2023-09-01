@@ -29,7 +29,7 @@ export default class ImageSourceNode extends BaseNode {
   }
 
   setupNode() {
-    const newThumbnail = new Thumbnail(props.globalBaseHeight * 3, (newData, channels) => {
+    const newThumbnail = new Thumbnail(props.globalBaseHeight * 4, (newData, channels) => {
       this.outputTerminals[0].setData(newData);
       this.outputTerminals[1].setData(channels[0]);
       this.outputTerminals[2].setData(channels[1]);
@@ -38,7 +38,6 @@ export default class ImageSourceNode extends BaseNode {
 
     this.outputTerminals[0].data = newThumbnail.imageData;
     this.addComponent(newThumbnail);
-    this.addComponent(new Row(props.globalBaseHeight, [], 5));
     this.draw(ctx);
   }
 }
