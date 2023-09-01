@@ -38,7 +38,7 @@ export default class ContrastNode extends BaseNode {
       new Row(props.globalBaseHeight, [new Label(props.globalBaseHeight, "Factor", "left"), labelValue], 5)
     );
     this.addComponent(
-      new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.5, -100, 100, 0, (value) => {
+      new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.4, -100, 100, 0, (value) => {
         this.config.factor = value;
         labelValue.setLabel(this.config.factor.toString());
       })

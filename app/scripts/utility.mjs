@@ -114,7 +114,11 @@ export const canConnect = (startType, endType) => {
   return false;
 };
 export const extractChannels = (image) => {
-  const [channelR, channelG, channelB] = new Array(3).fill(new ImageData(image.width, image.height));
+  const [channelR, channelG, channelB] = [
+    new ImageData(image.width, image.height),
+    new ImageData(image.width, image.height),
+    new ImageData(image.width, image.height),
+  ];
 
   for (let i = 0; i < image.data.length; i += 4) {
     channelR.data[i + 0] = image.data[i + 0];

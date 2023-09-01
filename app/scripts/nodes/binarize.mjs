@@ -38,7 +38,7 @@ export default class BinarizeNode extends BaseNode {
       )
     );
     this.addComponent(
-      new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.5, 0, 255, 40, (value) => {
+      new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.4, 0, 255, 40, (value) => {
         this.config.threshold = value;
         newLabelValue.setLabel(this.config.threshold.toString());
       })

@@ -28,6 +28,7 @@
   justify-content: center;
   align-items: center;
   z-index: 15;
+  touch-action: none;
 }
 .resize-icon {
   pointer-events: none;
@@ -79,6 +80,11 @@
 }
 .overlay.rendering {
   z-index: 9;
+}
+
+#editorCanvas,
+#renderCanvas {
+  touch-action: none;
 }
 
 @media (max-width: 768px) {

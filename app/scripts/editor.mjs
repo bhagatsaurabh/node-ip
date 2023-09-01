@@ -21,8 +21,8 @@ let panFlag = 0;
 let currentContextMenu = null;
 let isContextMenuOpened = false; */
 
-const pushOutputNode = () => {
-  const width = dimensions.x * 0.2 * props.globalScaleRatio;
+export const pushOutputNode = () => {
+  const width = 150 * props.globalScaleRatio;
   nodes.push(
     new nodeTypes.OutputNode(
       dimensions.x / 2 - width / 2,
@@ -33,9 +33,7 @@ const pushOutputNode = () => {
       props.unit * 0.7
     )
   );
-  redraw();
 };
-pushOutputNode();
 
 const editorCanvas = refOne("#editorCanvas");
 editorCanvas.addEventListener("keydown", (e) => {
@@ -53,7 +51,7 @@ editorCanvas.addEventListener("drop", (e) => {
   e.preventDefault();
   props.globalScaleRatio = nodes.length > 0 ? nodes[0].scaleRatio : 1;
 
-  handleDrop(e.dataTransfer.getData("new-node"), { x: e.clientX, y: e.clientY });
+  handleDrop(e.dataTransfer.getData("text/plain"), { x: e.clientX, y: e.clientY });
 });
 editorCanvas.addEventListener("click", (e) => {
   const pos = getPos(editorCanvas, { x: e.clientX, y: e.clientY });
@@ -120,8 +118,8 @@ editorCanvas.addEventListener("pointermove", (e) => {
       const currDistance = distance(pointers[0].pos, pointers[1].pos);
       if (currDistance !== prevDistance) {
         handleZoom(currDistance < prevDistance, pos);
-        currDistance = prevDistance;
       }
+      currDistance = prevDistance;
     }
   } else {
     if (currDragNode && sliderDragFlag === 0) {
@@ -170,6 +168,8 @@ const handlePointerUp = (e) => {
     currSlider = null;
     currDragNode = null;
   }
+
+  if (pointers.length === 0 && prevDistance !== -1) prevDistance = -1;
 };
 editorCanvas.addEventListener("pointerup", handlePointerUp);
 editorCanvas.addEventListener("pointerout", handlePointerUp);
@@ -228,58 +228,79 @@ const getNodeFromPos = (pos) => {
   return inbounds.find((o) => o.order === highestOrder);
 };
 
-const handleDrop = (nodeName, absPos) => {
+export const handleDrop = (nodeName, absPos) => {
   const pos = getPos(editorCanvas, absPos);
 
   let width;
   switch (nodeName) {
     case "image": {
-      width = dimensions.x * 0.3 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.ImageSourceNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
+      width = 200 * props.globalScaleRatio;
+      nodes.unshift(
+        new nodeTypes.ImageSourceNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
+      );
       break;
     }
     case "grayscale": {
-      width = dimensions.x * 0.15 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.GrayscaleNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
+      width = 150 * props.globalScaleRatio;
+      nodes.unshift(
+        new nodeTypes.GrayscaleNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
+      );
       break;
     }
     case "binarize": {
-      width = dimensions.x * 0.3 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.BinarizeNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
+      width = 200 * props.globalScaleRatio;
+      nodes.unshift(
+        new nodeTypes.BinarizeNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
+      );
       break;
     }
     case "layer": {
-      width = dimensions.x * 0.3 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.LayerNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
+      width = 250 * props.globalScaleRatio;
+      nodes.unshift(
+        new nodeTypes.LayerNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
+      );
       break;
     }
     case "combinechannel": {
-      width = dimensions.x * 0.2 * props.globalScaleRatio;
+      width = 150 * props.globalScaleRatio;
       nodes.unshift(
-        new nodeTypes.CombineChannelNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
+        new nodeTypes.CombineChannelNode(
+          pos.x,
+          pos.y,
+          width,
+          nodes.length,
+          props.unit * 1.5,
+          props.unit * 0.7
+        )
       );
       break;
     }
     case "brightness": {
-      width = dimensions.x * 0.25 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.BrightnessNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
+      width = 200 * props.globalScaleRatio;
+      nodes.unshift(
+        new nodeTypes.BrightnessNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
+      );
       break;
     }
     case "contrast": {
-      width = dimensions.x * 0.25 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.ContrastNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
+      width = 200 * props.globalScaleRatio;
+      nodes.unshift(
+        new nodeTypes.ContrastNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
+      );
       break;
     }
     case "reducepalette": {
-      width = dimensions.x * 0.18 * props.globalScaleRatio;
+      width = 150 * props.globalScaleRatio;
       nodes.unshift(
         new nodeTypes.ReducePaletteNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
       );
       break;
     }
     case "gamma": {
-      width = dimensions.x * 0.25 * props.globalScaleRatio;
-      nodes.unshift(new nodeTypes.GammaNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7));
+      width = 200 * props.globalScaleRatio;
+      nodes.unshift(
+        new nodeTypes.GammaNode(pos.x, pos.y, width, nodes.length, props.unit * 1.5, props.unit * 0.7)
+      );
       break;
     }
     default:

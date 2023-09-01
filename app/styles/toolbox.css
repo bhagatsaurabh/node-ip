@@ -29,6 +29,7 @@
   text-overflow: ellipsis;
   margin-left: 0.5rem;
   text-align: left;
+  pointer-events: none;
 }
 
 .toolbox-category {
@@ -124,6 +125,7 @@
 .icon {
   margin: 0;
   width: 2rem;
+  pointer-events: none;
 }
 .item-container .tooltip {
   font-size: 0.7rem;
@@ -140,6 +142,7 @@
   opacity: 0;
   transition: opacity 0.2s;
   transition-delay: 0.5s;
+  pointer-events: none;
 }
 .item-container:hover > .tooltip {
   visibility: visible;

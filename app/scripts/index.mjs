@@ -1,6 +1,7 @@
 import { renderOutput } from "./renderer.mjs";
 import { redraw, setDimensions } from "./state/editor.mjs";
 import { init, refAll, refOne, isInRange, throttle } from "./utility.mjs";
+import { handleDrop, pushOutputNode } from "./editor.mjs";
 
 init();
 refAll(".toolbox .toolbox-category").forEach((el) => (el.style.visibility = "hidden"));
@@ -11,12 +12,18 @@ const editorCanvas = refOne("#editorCanvas");
 const renderCanvas = refOne("#renderCanvas");
 const toolboxEl = refOne(".toolbox");
 
+let outputPushed = false;
 const handleCanvasResize = throttle((entries) => {
   entries.forEach((entry) => {
     entry.target.width = entry.contentRect.width;
     entry.target.height = entry.contentRect.height;
     setDimensions({ x: entry.target.width, y: entry.target.height }, entry.target.id);
   });
+
+  if (!outputPushed) {
+    pushOutputNode();
+    outputPushed = !outputPushed;
+  }
 }, 100);
 const resizeObserver = new ResizeObserver(handleCanvasResize);
 
@@ -166,6 +173,10 @@ for (const heading of refAll(".toolbox .heading")) {
 
 refAll(".item-container").forEach((el) => {
   el.addEventListener("dragstart", (e) => {
-    e.dataTransfer.setData("new-node", e.target.dataset.name);
+    e.dataTransfer.setData("text/plain", e.target.dataset.name);
+  });
+  el.addEventListener("click", (e) => {
+    const rect = editorCanvas.getBoundingClientRect();
+    handleDrop(e.target.dataset.name, { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 });
   });
 });

@@ -40,21 +40,29 @@ export default class BaseNode {
 
     ctx.roundUpperRect(
       this.x,
-      this.y - this.height / 2 + props.globalOutlineWidth + (this.radius + props.globalBaseHeight) / 2,
-      this.width - 4,
+      this.y - this.height / 2 + props.globalOutlineWidth / 2 + (this.radius + props.globalBaseHeight) / 2,
+      this.width - props.globalOutlineWidth * 1.5,
       this.radius + props.globalBaseHeight,
       this.radius
     );
-    ctx.lineWidth = "1";
+    ctx.lineWidth = 1;
     ctx.fillStyle = this.color;
     ctx.strokeStyle = this.color;
     ctx.fill();
     ctx.stroke();
+    ctx.lineWidth = props.globalOutlineWidth.toString();
     ctx.beginPath();
-    ctx.moveTo(this.x - this.width / 2, this.y - this.height / 2 + this.radius + props.globalBaseHeight - 1);
-    ctx.lineTo(this.x + this.width / 2, this.y - this.height / 2 + this.radius + props.globalBaseHeight - 1);
+    ctx.moveTo(
+      this.x - this.width / 2 + props.globalOutlineWidth / 2,
+      this.y - this.height / 2 + this.radius / 2 + props.globalBaseHeight - props.globalOutlineWidth
+    );
+    ctx.lineTo(
+      this.x + this.width / 2 - props.globalOutlineWidth / 2,
+      this.y - this.height / 2 + this.radius / 2 + props.globalBaseHeight - props.globalOutlineWidth
+    );
     ctx.strokeStyle = "#000000aa";
     ctx.stroke();
+    ctx.lineWidth = 1;
 
     ctx.font = "bold " + props.globalFontSize + "px arial";
     ctx.fillStyle = "#000000aa";
