@@ -8,7 +8,7 @@ export default class Thumbnail {
     this.image = document.createElement("img");
     this.imageData = null;
     this.image.crossOrigin = "Anonymous";
-    this.image.src = "/app/assets/icons/image.png";
+    this.image.src = "/assets/icons/image.png";
     this.onImageChange = onImageChange;
 
     this.setup();
