@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: node-ip-dist
+          path: app
+
+  Deploy-ghpages:
+    needs: [Build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Download dist artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: node-ip-dist
+          path: app
+
+      - name: Deploy to GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: app
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  Deploy-Firebase:
+    needs: [Build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Download dist artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: node-ip-dist
+          path: app
+
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_NODE_IP_77D72 }}"
+          channelId: live
+          projectId: node-ip-77d72
+
+  Cleanup:
+    needs: [Deploy-ghpages, Deploy-Firebase]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete dist artifacts
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: node-ip-dist
