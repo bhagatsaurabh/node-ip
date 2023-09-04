@@ -10,7 +10,7 @@ import {
   upScaleStep,
 } from "./state/editor.mjs";
 import { nodes } from "./state/nodes.mjs";
-import { checkConnectionToOutput, debugPoint, distance, getPos, midpoint, refOne } from "./utility.mjs";
+import { checkConnectionToOutput, distance, getPos, midpoint, refOne } from "./utility.mjs";
 import * as nodeTypes from "./nodes/index.mjs";
 
 let shiftStatus = false;

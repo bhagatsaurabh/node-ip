@@ -5,7 +5,8 @@ import Slider from "../components/slider.mjs";
 import Terminal from "../components/terminal.mjs";
 import { renderOutput } from "../renderer.mjs";
 import { ctx, props } from "../state/editor.mjs";
-import { throttle } from "../utility.mjs";
+import { nodes } from "../state/nodes.mjs";
+import { checkConnectionToOutput } from "../utility.mjs";
 
 export default class BinarizeNode extends BaseNode {
   constructor(x, y, width, order, hPadding, vSpacing) {
@@ -43,7 +44,7 @@ export default class BinarizeNode extends BaseNode {
       new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.4, 0, 255, 40, (value) => {
         this.config.threshold = value;
         newLabelValue.setLabel(this.config.threshold.toString());
-        renderOutput();
+        if (checkConnectionToOutput(this, nodes)) renderOutput();
       })
     );
 
