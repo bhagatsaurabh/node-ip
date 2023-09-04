@@ -24,6 +24,9 @@ const handleCanvasResize = throttle((entries) => {
     pushOutputNode();
     outputPushed = !outputPushed;
   }
+
+  redraw(true);
+  renderOutput();
 }, 100);
 const resizeObserver = new ResizeObserver(handleCanvasResize);
 
@@ -124,7 +127,7 @@ const resizingWait = (status) => {
   }
 
   if (!status) {
-    redraw();
+    redraw(true);
     renderOutput();
   }
 };

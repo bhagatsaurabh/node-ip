@@ -1,11 +1,16 @@
-import { renderCtx, renderDimensions } from "./state/editor.mjs";
+import {
+  downScaleStep,
+  downScaleStepSensitive,
+  renderCtx,
+  renderDimensions,
+  upScaleStep,
+  upScaleStepSensitive,
+} from "./state/editor.mjs";
 import { nodes } from "./state/nodes.mjs";
 import { distance, getPos, refOne } from "./utility.mjs";
 
 let gSFactor = 1.0;
 let scaleRatio = 1.0;
-const downScaleStep = 0.9;
-const upScaleStep = 1.1;
 const tempCanvas = document.createElement("canvas");
 const tempContext = tempCanvas.getContext("2d");
 let [renderWidth, renderHeight] = [-1, -1];
@@ -47,13 +52,22 @@ const renderOutput = () => {
   };
 };
 
-const handleZoom = (type) => {
-  if (type) {
-    gSFactor = downScaleStep;
-    scaleRatio *= downScaleStep;
+const handleZoom = (type, isSensitive) => {
+  let downStep, upStep;
+  if (isSensitive) {
+    downStep = downScaleStepSensitive;
+    upStep = upScaleStepSensitive;
   } else {
-    gSFactor = upScaleStep;
-    scaleRatio *= upScaleStep;
+    downStep = downScaleStep;
+    upStep = upScaleStep;
+  }
+
+  if (type) {
+    gSFactor = downStep;
+    scaleRatio *= downStep;
+  } else {
+    gSFactor = upStep;
+    scaleRatio *= upStep;
   }
   renderWidth *= gSFactor;
   renderHeight *= gSFactor;
@@ -67,15 +81,17 @@ const handleZoom = (type) => {
     renderHeight
   );
 };
+
+const pointers = [];
+let prevDistance = -1;
 const removePointer = (e) => {
   const index = pointers.findIndex((pointer) => pointer.id === e.pointerId);
   if (index > -1) {
     pointers.splice(index, 1);
   }
-};
 
-const pointers = [];
-const prevDistance = -1;
+  if (pointers.length < 2) prevDistance = -1;
+};
 renderCanvas.onpointerdown = (e) => {
   if (pointers.length >= 2) return;
 
@@ -89,12 +105,14 @@ renderCanvas.onpointermove = (e) => {
 
   const pointer = pointers.find((pointer) => pointer.id === e.pointerId);
   if (pointer) {
-    pointer.pos = { x: e.clientX, y: e.clientY };
+    pointer.pos = getPos(renderCanvas, { x: e.clientX, y: e.clientY });
     const currDistance = distance(pointers[0].pos, pointers[1].pos);
-    if (currDistance !== prevDistance) {
-      handleZoom(currDistance < prevDistance);
-      currDistance = prevDistance;
+    if (prevDistance > 0) {
+      if (currDistance !== prevDistance) {
+        handleZoom(currDistance < prevDistance, true);
+      }
     }
+    prevDistance = currDistance;
   }
 };
 renderCanvas.onpointerup = (e) => removePointer(e);
@@ -102,7 +120,7 @@ renderCanvas.onpointerout = (e) => removePointer(e);
 
 renderCanvas.onwheel = (e) => {
   if (e.wheelDelta) {
-    handleZoom(e.wheelDelta < 0);
+    handleZoom(e.wheelDelta < 0, false);
   }
 };
 

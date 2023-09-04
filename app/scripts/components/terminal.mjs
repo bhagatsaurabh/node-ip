@@ -14,6 +14,7 @@ export default class Terminal {
     this.connector = null;
     this.guid = guid();
     this.data = data;
+    this.selected = false;
 
     this.setup();
     if (this.type === "in") {
@@ -39,6 +40,15 @@ export default class Terminal {
     ctx.strokeStyle = "#000000aa";
     ctx.fill();
     ctx.stroke();
+
+    if (this.selected) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius * 1.5, 0, 𝜏);
+      ctx.lineWidth = props.unit / 2;
+      ctx.strokeStyle = "#000000aa";
+      ctx.stroke();
+      ctx.lineWidth = "1";
+    }
   }
   scale(factor) {
     this.radius *= factor;
@@ -53,22 +63,28 @@ export default class Terminal {
             this.connector = null;
           }
           props.currentConnector = new Connector(this, this.parent);
+          this.selected = true;
+          redraw(true);
         } else {
           return;
         }
         props.terminalStartFlag = 1;
       } else {
+        const currConnector = props.currentConnector;
         if (
           props.currentConnector.terminalStart.guid === this.guid ||
           !canConnect(props.currentConnector.terminalStart.category, this.category)
         ) {
           props.currentConnector.terminalStart.connector = null;
           props.currentConnector = null;
-          redraw(true);
         } else {
           props.currentConnector.connect(this, this.parent);
         }
+        if (currConnector) {
+          currConnector.terminalStart.selected = false;
+        }
         props.terminalStartFlag = 0;
+        redraw(true);
       }
     }
   }
