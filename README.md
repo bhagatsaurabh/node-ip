@@ -3,7 +3,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/saurabh-prosoft/node-ip/main/app/assets/images/cover-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/saurabh-prosoft/node-ip/main/app/assets/images/cover-light.png">
-  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="https://raw.githubusercontent.com/saurabh-prosoft/node-ip/main/app/assets/images/cover-light.png">
+  <img width="66%" alt="vAP Cover" alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="https://raw.githubusercontent.com/saurabh-prosoft/node-ip/main/app/assets/images/cover-light.png">
 </picture>
 </a>
 </p>
