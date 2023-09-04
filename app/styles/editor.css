@@ -80,6 +80,14 @@
 }
 .overlay.rendering {
   z-index: 9;
+  bottom: 0;
+  top: unset;
+  height: auto;
+  text-align: left;
+  padding: 0.5rem;
+  background: transparent;
+  color: gray;
+  width: auto;
 }
 
 #editorCanvas,
