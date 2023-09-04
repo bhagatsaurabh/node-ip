@@ -10,8 +10,7 @@ import {
   upScaleStep,
 } from "./state/editor.mjs";
 import { nodes } from "./state/nodes.mjs";
-import { 𝜏 } from "./constants.mjs";
-import { checkConnectionToOutput, distance, getPos, midpoint, refOne } from "./utility.mjs";
+import { checkConnectionToOutput, debugPoint, distance, getPos, midpoint, refOne } from "./utility.mjs";
 import * as nodeTypes from "./nodes/index.mjs";
 
 let shiftStatus = false;
@@ -118,7 +117,7 @@ editorCanvas.addEventListener("pointerdown", (e) => {
 editorCanvas.addEventListener("pointermove", (e) => {
   const pos = getPos(editorCanvas, { x: e.clientX, y: e.clientY });
 
-  if (pointers.length >= 2) return;
+  if (pointers.length > 2) return;
   else if (pointers.length === 2) {
     const pointer = pointers.find((p) => p.id === e.pointerId);
     if (pointer) {
@@ -184,6 +183,8 @@ const handlePointerUp = (e) => {
 editorCanvas.addEventListener("pointerup", handlePointerUp);
 editorCanvas.addEventListener("pointerout", handlePointerUp);
 const handleZoom = (type, pos, isSensitive) => {
+  if ((props.unit <= 2 && type) || (props.unit >= 20 && !type)) return;
+
   let downStep, upStep;
   if (isSensitive) {
     downStep = downScaleStepSensitive;
@@ -325,4 +326,3 @@ export const handleDrop = (nodeName, absPos) => {
       break;
   }
 };
-
