@@ -5,6 +5,9 @@ import Slider from "../components/slider.mjs";
 import Row from "../components/row.mjs";
 import Button from "../components/button.mjs";
 import { ctx, props } from "../state/editor.mjs";
+import { renderOutput } from "../renderer.mjs";
+import { checkConnectionToOutput } from "../utility.mjs";
+import { nodes } from "../state/nodes.mjs";
 
 export default class LayerNode extends BaseNode {
   constructor(x, y, width, order, hPadding, vSpacing) {
@@ -43,6 +46,7 @@ export default class LayerNode extends BaseNode {
           new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.3, 0, 100, 100, (value) => {
             this.config.alphas[0] = value;
             label1.setLabel(this.config.alphas[0].toString());
+            if (checkConnectionToOutput(this, nodes)) renderOutput();
           }),
           label1,
         ],
@@ -57,6 +61,7 @@ export default class LayerNode extends BaseNode {
           new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.3, 0, 100, 50, (value) => {
             this.config.alphas[1] = value;
             label2.setLabel(this.config.alphas[1].toString());
+            if (checkConnectionToOutput(this, nodes)) renderOutput();
           }),
           label2,
         ],
@@ -78,6 +83,7 @@ export default class LayerNode extends BaseNode {
               new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.3, 0, 100, 50, (value) => {
                 this.config.alphas[index] = value;
                 label.setLabel(this.config.alphas[index].toString());
+                if (checkConnectionToOutput(this, nodes)) renderOutput();
               }),
               label,
             ],

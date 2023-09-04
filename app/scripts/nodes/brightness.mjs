@@ -4,6 +4,9 @@ import Label from "../components/label.mjs";
 import Row from "../components/row.mjs";
 import Slider from "../components/slider.mjs";
 import { ctx, props } from "../state/editor.mjs";
+import { renderOutput } from "../renderer.mjs";
+import { checkConnectionToOutput } from "../utility.mjs";
+import { nodes } from "../state/nodes.mjs";
 
 export default class BrightnessNode extends BaseNode {
   constructor(x, y, width, order, hPadding, vSpacing) {
@@ -41,6 +44,7 @@ export default class BrightnessNode extends BaseNode {
       new Slider(props.globalBaseHeight, props.globalBaseHeight * 0.4, -100, 100, 0, (value) => {
         this.config.factor = value;
         labelValue.setLabel(this.config.factor.toString());
+        if (checkConnectionToOutput(this, nodes)) renderOutput();
       })
     );
 

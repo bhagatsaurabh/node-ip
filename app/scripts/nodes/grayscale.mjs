@@ -4,6 +4,7 @@ import BaseNode from "../components/base-node.mjs";
 import Choice from "../components/choice.mjs";
 import { checkConnectionToOutput } from "../utility.mjs";
 import { nodes } from "../state/nodes.mjs";
+import { renderOutput } from "../renderer.mjs";
 
 export default class GrayscaleNode extends BaseNode {
   constructor(x, y, width, order, hPadding, vSpacing) {
@@ -31,7 +32,7 @@ export default class GrayscaleNode extends BaseNode {
     this.addComponent(
       new Choice(["Average", "Weighted"], 0, (choice) => {
         this.config.type = choice.toLowerCase();
-        checkConnectionToOutput(this, nodes);
+        if (checkConnectionToOutput(this, nodes)) renderOutput();
       })
     );
 
