@@ -109,6 +109,10 @@ export const checkConnectionToOutput = (node, tree) => {
 export const distance = (a, b) => {
   return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
 };
+export const midpoint = (a, b) => ({
+  x: (a.x + b.x) / 2,
+  y: (a.y + b.y) / 2,
+});
 export const canConnect = (startType, endType) => {
   if (endType.includes(startType)) return true;
   return false;
@@ -146,4 +150,74 @@ export const getPos = (el, pos) => {
     x: pos.x - rect.left,
     y: pos.y - rect.top,
   };
+};
+export const debugPoint = (ctx, { x, y }) => {
+  setTimeout(() => {
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, 𝜏);
+    ctx.fillStyle = "#f00";
+    ctx.fill();
+  }, 100);
+};
+export const debugObject = (ctx, obj) => {
+  setTimeout(() => {
+    ctx.beginPath();
+    ctx.arc(obj.x, obj.y, 3, 0, 𝜏);
+    ctx.fillStyle = "#f00";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(obj.x - obj.width / 2, obj.y);
+    ctx.lineTo(obj.x + obj.width / 2, obj.y);
+    ctx.strokeStyle = "#f00";
+    ctx.lineWidth = "1";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(obj.x, obj.y - obj.height / 2);
+    ctx.lineTo(obj.x, obj.y + obj.height / 2);
+    ctx.strokeStyle = "#f00";
+    ctx.lineWidth = "1";
+    ctx.stroke();
+  }, 100);
+};
+export const debugComponent = (ctx, component) => {
+  setTimeout(() => {
+    ctx.beginPath();
+    ctx.arc(
+      component.parent.x - component.parent.width / 2 + component.x,
+      component.parent.y - component.parent.height / 2 + component.y,
+      3,
+      0,
+      𝜏
+    );
+    ctx.fillStyle = "#f00";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(
+      component.parent.x - component.parent.width / 2 + component.x - component.width / 2,
+      component.parent.y - component.parent.height / 2 + component.y
+    );
+    ctx.lineTo(
+      component.parent.x - component.parent.width / 2 + component.x + component.width / 2,
+      component.parent.y - component.parent.height / 2 + component.y
+    );
+    ctx.strokeStyle = "#f00";
+    ctx.lineWidth = "1";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(
+      component.parent.x - component.parent.width / 2 + component.x,
+      component.parent.y - component.parent.height / 2 + component.y - component.height / 2
+    );
+    ctx.lineTo(
+      component.parent.x - component.parent.width / 2 + component.x,
+      component.parent.y - component.parent.height / 2 + component.y + component.height / 2
+    );
+    ctx.strokeStyle = "#f00";
+    ctx.lineWidth = "1";
+    ctx.stroke();
+  }, 100);
 };

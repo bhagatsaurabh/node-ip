@@ -1,11 +1,19 @@
-import { dimensions, props, redraw, ctx, redrawWithDelta } from "./state/editor.mjs";
+import {
+  dimensions,
+  props,
+  redraw,
+  ctx,
+  redrawWithDelta,
+  downScaleStepSensitive,
+  upScaleStepSensitive,
+  downScaleStep,
+  upScaleStep,
+} from "./state/editor.mjs";
 import { nodes } from "./state/nodes.mjs";
 import { 𝜏 } from "./constants.mjs";
-import { checkConnectionToOutput, distance, getPos, refOne } from "./utility.mjs";
+import { checkConnectionToOutput, distance, getPos, midpoint, refOne } from "./utility.mjs";
 import * as nodeTypes from "./nodes/index.mjs";
 
-const downScaleStep = 0.9;
-const upScaleStep = 1.1;
 let shiftStatus = false;
 let nodeDragFlag = 0;
 let currDragNode = null;
@@ -65,7 +73,7 @@ editorCanvas.addEventListener("click", (e) => {
   }
 });
 const pointers = [];
-const prevDistance = -1;
+let prevDistance = -1;
 editorCanvas.addEventListener("pointerdown", (e) => {
   if (pointers.length >= 2) return;
   const pos = getPos(editorCanvas, { x: e.clientX, y: e.clientY });
@@ -116,10 +124,12 @@ editorCanvas.addEventListener("pointermove", (e) => {
     if (pointer) {
       pointer.pos = pos;
       const currDistance = distance(pointers[0].pos, pointers[1].pos);
-      if (currDistance !== prevDistance) {
-        handleZoom(currDistance < prevDistance, pos);
+      if (prevDistance > 0) {
+        if (currDistance !== prevDistance) {
+          handleZoom(currDistance < prevDistance, midpoint(pointers[0].pos, pointers[1].pos), true);
+        }
       }
-      currDistance = prevDistance;
+      prevDistance = currDistance;
     }
   } else {
     if (currDragNode && sliderDragFlag === 0) {
@@ -169,15 +179,24 @@ const handlePointerUp = (e) => {
     currDragNode = null;
   }
 
-  if (pointers.length === 0 && prevDistance !== -1) prevDistance = -1;
+  if (pointers.length < 2) prevDistance = -1;
 };
 editorCanvas.addEventListener("pointerup", handlePointerUp);
 editorCanvas.addEventListener("pointerout", handlePointerUp);
-const handleZoom = (type, pos) => {
-  if (type) {
-    props.gSFactor = downScaleStep;
+const handleZoom = (type, pos, isSensitive) => {
+  let downStep, upStep;
+  if (isSensitive) {
+    downStep = downScaleStepSensitive;
+    upStep = upScaleStepSensitive;
   } else {
-    props.gSFactor = upScaleStep;
+    downStep = downScaleStep;
+    upStep = upScaleStep;
+  }
+
+  if (type) {
+    props.gSFactor = downStep;
+  } else {
+    props.gSFactor = upStep;
   }
 
   props.globalFontSize *= props.gSFactor;
@@ -189,7 +208,7 @@ const handleZoom = (type, pos) => {
   props.globalConnectorWidth *= props.gSFactor;
   props.globalOutlineWidth *= props.gSFactor;
 
-  for (let node of nodes) {
+  nodes.forEach((node) => {
     if (node.x > pos.x && node.y > pos.y) {
       node.x = pos.x + props.gSFactor * Math.abs(pos.x - node.x);
       node.y = pos.y + props.gSFactor * Math.abs(pos.y - node.y);
@@ -203,15 +222,14 @@ const handleZoom = (type, pos) => {
       node.x = pos.x - props.gSFactor * Math.abs(pos.x - node.x);
       node.y = pos.y - props.gSFactor * Math.abs(pos.y - node.y);
     }
-  }
-  for (let node of nodes) {
-    node.scale(props.gSFactor);
-  }
+  });
+  nodes.forEach((node) => node.scale(props.gSFactor));
+
   redraw(true);
 };
 editorCanvas.addEventListener("wheel", (e) => {
   if (e.wheelDelta) {
-    handleZoom(e.wheelDelta < 0, getPos(editorCanvas, { x: e.clientX, y: e.clientY }));
+    handleZoom(e.wheelDelta < 0, getPos(editorCanvas, { x: e.clientX, y: e.clientY }), false);
   }
 });
 editorCanvas.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -308,73 +326,3 @@ export const handleDrop = (nodeName, absPos) => {
   }
 };
 
-const debugPoint = ({ x, y }) => {
-  setTimeout(() => {
-    ctx.beginPath();
-    ctx.arc(x, y, 3, 0, 𝜏);
-    ctx.fillStyle = "#f00";
-    ctx.fill();
-  }, 100);
-};
-const debugObject = (obj) => {
-  setTimeout(() => {
-    ctx.beginPath();
-    ctx.arc(obj.x, obj.y, 3, 0, 𝜏);
-    ctx.fillStyle = "#f00";
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(obj.x - obj.width / 2, obj.y);
-    ctx.lineTo(obj.x + obj.width / 2, obj.y);
-    ctx.strokeStyle = "#f00";
-    ctx.lineWidth = "1";
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(obj.x, obj.y - obj.height / 2);
-    ctx.lineTo(obj.x, obj.y + obj.height / 2);
-    ctx.strokeStyle = "#f00";
-    ctx.lineWidth = "1";
-    ctx.stroke();
-  }, 100);
-};
-const debugComponent = (component) => {
-  setTimeout(() => {
-    ctx.beginPath();
-    ctx.arc(
-      component.parent.x - component.parent.width / 2 + component.x,
-      component.parent.y - component.parent.height / 2 + component.y,
-      3,
-      0,
-      𝜏
-    );
-    ctx.fillStyle = "#f00";
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(
-      component.parent.x - component.parent.width / 2 + component.x - component.width / 2,
-      component.parent.y - component.parent.height / 2 + component.y
-    );
-    ctx.lineTo(
-      component.parent.x - component.parent.width / 2 + component.x + component.width / 2,
-      component.parent.y - component.parent.height / 2 + component.y
-    );
-    ctx.strokeStyle = "#f00";
-    ctx.lineWidth = "1";
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(
-      component.parent.x - component.parent.width / 2 + component.x,
-      component.parent.y - component.parent.height / 2 + component.y - component.height / 2
-    );
-    ctx.lineTo(
-      component.parent.x - component.parent.width / 2 + component.x,
-      component.parent.y - component.parent.height / 2 + component.y + component.height / 2
-    );
-    ctx.strokeStyle = "#f00";
-    ctx.lineWidth = "1";
-    ctx.stroke();
-  }, 100);
-};
