@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./styles/index.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Node IP" />
+    <link rel="apple-touch-icon" href="./assets/images/logo192.png" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>NodeIP</title>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <main id="app">
+      <aside class="toolbox">
+        <div class="heading-list">
+          <div data-category="close" class="heading close-toolbox">
+            <img src="./assets/icons/back.png" alt="back-icon" draggable="false" />
+          </div>
+          <div data-category="nodes" class="heading">Nodes</div>
+          <div data-category="edit" class="heading">File</div>
+        </div>
+        <section id="toolbox-nodes" class="toolbox-category custom-scroll">
+          <button class="item-container" draggable="true" data-name="image">
+            <span class="tooltip">Image</span>
+            <img class="icon" src="./assets/icons/image.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Image</span>
+          </button>
+          <button class="item-container" draggable="true" data-name="layer">
+            <span class="tooltip">Layer</span>
+            <img class="icon" src="./assets/icons/layer.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Layer</span>
+          </button>
+          <button class="item-container" draggable="true" data-name="combinechannel">
+            <span class="tooltip">Combine Channels</span>
+            <img class="icon" src="./assets/icons/combinechannel.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Combine Channels</span>
+          </button>
+          <button class="item-container" draggable="true" data-name="brightness">
+            <span class="tooltip">Brightness</span>
+            <img class="icon" src="./assets/icons/brightness.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Brightness</span>
+          </button>
+          <button class="item-container" draggable="true" data-name="contrast">
+            <span class="tooltip">Contrast</span>
+            <img class="icon" src="./assets/icons/contrast.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Contrast</span>
+          </button>
+          <button class="item-container" draggable="true" data-name="gamma">
+            <span class="tooltip">Gamma</span>
+            <img class="icon" src="./assets/icons/gamma.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Gamma</span>
+          </button>
+          <button class="item-container" draggable="true" data-name="grayscale">
+            <span class="tooltip">Grayscale</span>
+            <img class="icon" src="./assets/icons/grayscale.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Grayscale</span>
+          </button>
+          <button class="item-container" draggable="true" data-name="binarize">
+            <span class="tooltip">Binarize</span>
+            <img class="icon" src="./assets/icons/binarize.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Binarize</span>
+          </button>
+          <button class="item-container" draggable="true" data-name="reducepalette">
+            <span class="tooltip">Reduce Palette</span>
+            <img class="icon" src="./assets/icons/reducepalette.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Reduce Palette</span>
+          </button>
+        </section>
+        <section id="toolbox-edit" class="toolbox-category custom-scroll">
+          <button id="download-rendered" class="item-container">
+            <span class="tooltip">Download</span>
+            <img class="icon" src="./assets/icons/download.png" alt="image-icon" draggable="false" />
+            <span class="item-name">Download</span>
+          </button>
+        </section>
+      </aside>
+      <div class="editor-container">
+        <section class="editor">
+          <canvas id="editorCanvas"></canvas>
+          <div class="overlay resizing">Resizing...</div>
+        </section>
+        <div class="resize">
+          <svg class="resize-icon" width="8" height="30">
+            <circle cx="3" cy="3" r="2" fill="black" />
+            <circle cx="3" cy="15" r="2" fill="black" />
+            <circle cx="3" cy="27" r="2" fill="black" />
+          </svg>
+          <img class="resize-thumb" src="./assets/icons/resize.png" alt="resize-icon" draggable="false" />
+        </div>
+        <section class="rendered">
+          <canvas id="renderCanvas"></canvas>
+          <div class="overlay resizing">Resizing...</div>
+          <div class="overlay rendering">Rendering</div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module" src="scripts/index.mjs"></script>
+    <script type="module" src="scripts/editor.mjs"></script>
+  </body>
+</html>
