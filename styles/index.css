@@ -1,0 +1,37 @@
+@import "./toolbox.css";
+@import "./editor.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+@media (hover: hover) {
+  .custom-scroll {
+    scrollbar-color: #999 #333;
+    scrollbar-gutter: stable;
+  }
+  .custom-scroll::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background: #cacaca;
+    box-shadow: 0 0 5px 0px #000;
+  }
+  .custom-scroll::-webkit-scrollbar-track {
+    background: #4d4d4d;
+    box-shadow: 0 0 3px 0px inset;
+  }
+}

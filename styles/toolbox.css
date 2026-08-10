@@ -1,0 +1,157 @@
+:root {
+  --toolbox-width: 9rem;
+}
+
+.toolbox {
+  position: fixed;
+  left: calc(0rem - var(--toolbox-width));
+  top: 0;
+  width: var(--toolbox-width);
+  height: 100%;
+  background-color: rgb(194, 194, 194);
+  z-index: 20;
+  transition: left 0.15s linear, box-shadow 0.15s linear;
+  box-shadow: 0 0 0px 0px #000;
+}
+.toolbox.open {
+  left: 0;
+  box-shadow: 0 0 10px 0px #000;
+}
+
+.toolbox .heading-list {
+  position: relative;
+  z-index: 1;
+}
+
+.toolbox .item-name {
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 0.5rem;
+  text-align: left;
+  pointer-events: none;
+}
+
+.toolbox-category {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: rgb(153, 153, 153);
+  padding: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.15s linear;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.toolbox-category.show {
+  opacity: 1;
+  visibility: visible !important;
+}
+
+.close-toolbox {
+  width: 1.1rem;
+  box-shadow: 4px 0px 8px -3px !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s linear;
+}
+.close-toolbox img {
+  width: 100%;
+  pointer-events: none;
+}
+.toolbox.open .close-toolbox {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.toolbox .heading {
+  left: 100%;
+  position: relative;
+  font-size: 0.75rem;
+  writing-mode: vertical-rl;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.15rem 0.5rem 0.25rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  box-shadow: 4px 0px 8px -3px;
+  background-color: rgb(153, 153, 153);
+  font-weight: bold;
+  transition: background-color 0.15s linear;
+}
+.toolbox.open .heading {
+  box-shadow: 4px 0px 8px -3px, 4px 0px 5px -3px inset;
+}
+.toolbox.open .heading.active {
+  z-index: 5;
+  box-shadow: 4px 0px 8px -3px;
+}
+.toolbox .heading.active:hover {
+  background-color: rgb(153, 153, 153);
+}
+.toolbox .heading:hover {
+  background-color: rgb(201, 201, 201);
+}
+
+.toolbox .item-container {
+  padding: 0.5rem;
+  background-color: transparent;
+  position: relative;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border: 1px solid #000;
+  box-shadow: 0px 0px 0px 0px;
+  transition: box-shadow 0.1s linear;
+  font-size: 0rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+.toolbox .item-container:hover {
+  box-shadow: 0px 0px 2px 0.5px;
+}
+.icon {
+  margin: 0;
+  width: 2rem;
+  pointer-events: none;
+}
+.item-container .tooltip {
+  font-size: 0.7rem;
+  padding: 1.25rem 0.25rem 1.25rem 0.25rem;
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 999px;
+  position: absolute;
+  top: 30%;
+  left: 120%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s;
+  transition-delay: 0.5s;
+  pointer-events: none;
+}
+.item-container:hover > .tooltip {
+  visibility: visible;
+  opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .toolbox .heading {
+    padding: 0.75rem 0.25rem 0.75rem 0.25rem;
+    font-size: 1rem;
+  }
+}
