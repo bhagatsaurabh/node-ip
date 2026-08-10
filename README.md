@@ -1,5 +1,5 @@
 <p align="center">
-<a href="https://node-ip.saurabhagat.me">
+<a href="https://node-ip.saurabhagat.dev">
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/bhagatsaurabh/node-ip/main/app/assets/images/cover-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/bhagatsaurabh/node-ip/main/app/assets/images/cover-light.png">
@@ -20,7 +20,7 @@
 
 A simple node-based editor for image processing with multiple layers.
 
-Try it out [here](https://node-ip.saurabhagat.me/) !
+Try it out [here](https://node-ip.saurabhagat.dev/) !
 
 Types of Nodes (as of now):
 
